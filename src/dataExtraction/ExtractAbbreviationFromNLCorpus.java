@@ -172,11 +172,12 @@ public class ExtractAbbreviationFromNLCorpus {
 		generateAbbrevationCorpus(fpFullTextTrain,fopOutput+"train.s",fopOutput+"train.t",setVocabSource,setVocabTarget);
 		generateAbbrevationCorpus(fpFullTextValid,fopOutput+"tune.s",fopOutput+"tune.t",setVocabSource,setVocabTarget);
 		generateAbbrevationCorpus(fpFullTextTest,fopOutput+"test.s",fopOutput+"test.t",setVocabSource,setVocabTarget);
+		System.out.println("finish corpus");
 		
 		generateTotalAlignment(fopOutput, fopOutput+"train.s", fopOutput+"train.t", fopOutput 
 				+ "training.s-t.A3", fopOutput 
 				+ "training.t-s.A3", false);
-		
+		System.out.println("finish align");
 
 		StringBuilder sbVocabSource=new StringBuilder();
 		sbVocabSource.append("<unk>\n<s>\n</s>\n");
@@ -193,7 +194,7 @@ public class ExtractAbbreviationFromNLCorpus {
 		}
 		FileIO.writeStringToFile(sbVocabTarget.toString(), fopOutput+"vocab.t");
 		
-		
+		System.out.println("finish vocab");
 		
 		
 		
