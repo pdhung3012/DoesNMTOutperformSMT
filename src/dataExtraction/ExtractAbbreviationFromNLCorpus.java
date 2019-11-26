@@ -17,63 +17,69 @@ import utils.FileUtil;
 public class ExtractAbbreviationFromNLCorpus {
 
 	public static String tryGetLine(BufferedReader br) {
-		String line=null;
+		String line = null;
 		try {
 			line = br.readLine();
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return line;
 	}
-	
-	public static void generateAbbrevationCorpus(String fpSource,String fpOutputSource,String fpOutputTarget,HashSet<String> setVocabSource,HashSet<String> setVocabTarget){
-		StringBuilder sbResultSource=new StringBuilder();
-		StringBuilder sbResultTarget=new StringBuilder();
-		String[] lstInSource=FileIO.readFromLargeFile(fpSource).split("\n");
+
+	public static void generateAbbrevationCorpus(String fpSource, String fpOutputSource, String fpOutputTarget,
+			HashSet<String> setVocabSource, HashSet<String> setVocabTarget) {
+		StringBuilder sbResultSource = new StringBuilder();
+		StringBuilder sbResultTarget = new StringBuilder();
+		String[] lstInSource = FileIO.readFromLargeFile(fpSource).split("\n");
 //		String[] lstInTarget=FileIO.readFromLargeFile(fpInputTarget).split("\n");
-		
-		FileIO.writeStringToFile("",fpOutputSource);
-		FileIO.writeStringToFile("",fpOutputTarget);
+
+		FileIO.writeStringToFile("", fpOutputSource);
+		FileIO.writeStringToFile("", fpOutputTarget);
 //		System.out.println(lstInSource.length+" "+lstInTarget.length);
 //		
 //		setVocabSource.add(tokenUnknown);
 //		setVocabTarget.add(tokenUnknown);
-		
-		for(int i=0;i<lstInSource.length;i++) {
-			String[] arrSource=lstInSource[i].trim().split("\\s+");
+		System.out.println("source length " + lstInSource.length);
+		int numAfterFilter = 0;
+		for (int i = 0; i < lstInSource.length; i++) {
+			String[] arrSource = lstInSource[i].trim().split("\\s+");
 //			String[] arrTarget=lstInTarget[i].trim().split("\\s+");
-			StringBuilder sbItemSource=new StringBuilder();
-			StringBuilder sbItemTarget=new StringBuilder();
-			for(int j=0;j<arrSource.length;j++) {
-				String fullToken=arrSource[j].trim();				
-				if(!fullToken.isEmpty()) {
-					String abbrevToken=arrSource[j].substring(0,1);
-					sbItemSource.append(abbrevToken+" ");
-					sbItemTarget.append(fullToken+" ");
-					setVocabSource.add(abbrevToken);
-					setVocabTarget.add(fullToken);
+
+			if (arrSource.length <= 250) {
+				numAfterFilter++;
+				StringBuilder sbItemSource = new StringBuilder();
+				StringBuilder sbItemTarget = new StringBuilder();
+				for (int j = 0; j < arrSource.length; j++) {
+					String fullToken = arrSource[j].trim();
+					if (!fullToken.isEmpty()) {
+						String abbrevToken = arrSource[j].substring(0, 1);
+						sbItemSource.append(abbrevToken + " ");
+						sbItemTarget.append(fullToken + " ");
+						setVocabSource.add(abbrevToken);
+						setVocabTarget.add(fullToken);
+					}
+
 				}
-				
+
+				sbResultSource.append(sbItemSource.toString() + "\n");
+				sbResultTarget.append(sbItemTarget.toString() + "\n");
 			}
-			
-			sbResultSource.append(sbItemSource.toString()+"\n");
-			sbResultTarget.append(sbItemTarget.toString()+"\n");
-			
-			if((i+1)%100000 ==0 || i==lstInSource.length-1){
-				FileIO.appendStringToFile(sbResultSource.toString().trim()+"\n",fpOutputSource);
-				FileIO.appendStringToFile(sbResultTarget.toString().trim()+"\n",fpOutputTarget);
-				sbResultSource=new StringBuilder();
-				sbResultTarget=new StringBuilder();
+			if ((i + 1) % 100000 == 0 || i == lstInSource.length - 1) {
+				FileIO.appendStringToFile(sbResultSource.toString().trim() + "\n", fpOutputSource);
+				FileIO.appendStringToFile(sbResultTarget.toString().trim() + "\n", fpOutputTarget);
+				sbResultSource = new StringBuilder();
+				sbResultTarget = new StringBuilder();
 			}
 		}
 		
-		
-				
+		System.out.println("after source: "+numAfterFilter);
+
 	}
-	
-	public static int[] generateTotalAlignment(String fopPath,String fpSource,String fpTarget,String fpAlignST,String fpAlignTS, boolean doVerify) {
-		int[] numbers = new int[]{0, 0, 0, 0};
-		ArrayList<String> sourceSequences = FileUtil.getFileStringArray(fpSource), 
+
+	public static int[] generateTotalAlignment(String fopPath, String fpSource, String fpTarget, String fpAlignST,
+			String fpAlignTS, boolean doVerify) {
+		int[] numbers = new int[] { 0, 0, 0, 0 };
+		ArrayList<String> sourceSequences = FileUtil.getFileStringArray(fpSource),
 				targetSequences = FileUtil.getFileStringArray(fpTarget);
 		if (doVerify)
 			if (sourceSequences.size() != targetSequences.size()) {
@@ -130,74 +136,74 @@ public class ExtractAbbreviationFromNLCorpus {
 		psS2T.close();
 		psT2S.close();
 		if (doVerify) {
-			if (sourceSequences.size()*3 != FileUtil.countNumberOfLines(fpAlignST)
-					|| targetSequences.size()*3 != FileUtil.countNumberOfLines(fpAlignTS))
+			if (sourceSequences.size() * 3 != FileUtil.countNumberOfLines(fpAlignST)
+					|| targetSequences.size() * 3 != FileUtil.countNumberOfLines(fpAlignTS))
 				numbers[0]++;
 		}
 		return numbers;
 	}
-	
+
 	private static String generateHeader(String[] sTokens, String[] tTokens, int i) {
-		return "# sentence pair (" + i + ") source length " + sTokens.length + " target length " + tTokens.length + " alignment score : 0";
+		return "# sentence pair (" + i + ") source length " + sTokens.length + " target length " + tTokens.length
+				+ " alignment score : 0";
 	}
-	
+
 	private static String generateAlignment(String[] tokens) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("NULL ({  })");
 		for (int i = 0; i < tokens.length; i++) {
 			String t = tokens[i];
-			sb.append(" " + t + " ({ " + (i+1) + " })");
+			sb.append(" " + t + " ({ " + (i + 1) + " })");
 		}
 		return sb.toString();
 	}
-	
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String fopInput=PathConstanct.fop_NL_Data;
-		String fopOutput=PathConstanct.fop_NL_Data+"abbrevResolve"+File.separator;
-		String fpFullTextTrain=fopInput+"train.tok.clean.bpe.32000.en";
-		String fpFullTextValid=fopInput+"newstest2013.tok.bpe.32000.en";
-		String fpFullTextTest=fopInput+"newstest2015.tok.bpe.32000.en";
-		String fpFullTextVocab=fopInput+"vocab.bpe.32000.en";
-		
+		String fopInput = PathConstanct.fop_NL_Data;
+		String fopOutput = PathConstanct.fop_NL_Data + "abbrevResolve" + File.separator;
+		String fpFullTextTrain = fopInput + "train.tok.clean.bpe.32000.en";
+		String fpFullTextValid = fopInput + "newstest2013.tok.bpe.32000.en";
+		String fpFullTextTest = fopInput + "newstest2015.tok.bpe.32000.en";
+		String fpFullTextVocab = fopInput + "vocab.bpe.32000.en";
+
 //		String[] arrTrainText=FileIO.readFromLargeFile(fpFullTextTrain).split("\n");
 //		String[] arrValidText=FileIO.readFromLargeFile(fpFullTextValid).split("\n");
 //		String[] arrTestText=FileIO.readFromLargeFile(fpFullTextTest).split("\n");
-		
+
 		new File(fopOutput).mkdir();
-		
-		HashSet<String> setVocabSource=new LinkedHashSet<String>();
-		HashSet<String> setVocabTarget=new LinkedHashSet<String>();
-		
-		generateAbbrevationCorpus(fpFullTextTrain,fopOutput+"train.s",fopOutput+"train.t",setVocabSource,setVocabTarget);
-		generateAbbrevationCorpus(fpFullTextValid,fopOutput+"tune.s",fopOutput+"tune.t",setVocabSource,setVocabTarget);
-		generateAbbrevationCorpus(fpFullTextTest,fopOutput+"test.s",fopOutput+"test.t",setVocabSource,setVocabTarget);
+
+		HashSet<String> setVocabSource = new LinkedHashSet<String>();
+		HashSet<String> setVocabTarget = new LinkedHashSet<String>();
+
+		generateAbbrevationCorpus(fpFullTextTrain, fopOutput + "train.s", fopOutput + "train.t", setVocabSource,
+				setVocabTarget);
+		generateAbbrevationCorpus(fpFullTextValid, fopOutput + "tune.s", fopOutput + "tune.t", setVocabSource,
+				setVocabTarget);
+		generateAbbrevationCorpus(fpFullTextTest, fopOutput + "test.s", fopOutput + "test.t", setVocabSource,
+				setVocabTarget);
 		System.out.println("finish corpus");
-		
-		generateTotalAlignment(fopOutput, fopOutput+"train.s", fopOutput+"train.t", fopOutput 
-				+ "training.s-t.A3", fopOutput 
-				+ "training.t-s.A3", false);
+
+		generateTotalAlignment(fopOutput, fopOutput + "train.s", fopOutput + "train.t", fopOutput + "training.s-t.A3",
+				fopOutput + "training.t-s.A3", false);
 		System.out.println("finish align");
 
-		StringBuilder sbVocabSource=new StringBuilder();
+		StringBuilder sbVocabSource = new StringBuilder();
 		sbVocabSource.append("<unk>\n<s>\n</s>\n");
-		for(String str:setVocabSource) {
-			sbVocabSource.append(str+"\n");
+		for (String str : setVocabSource) {
+			sbVocabSource.append(str + "\n");
 		}
-		FileIO.writeStringToFile(sbVocabSource.toString(), fopOutput+"vocab.s");
+		FileIO.writeStringToFile(sbVocabSource.toString(), fopOutput + "vocab.s");
 
-		
-		StringBuilder sbVocabTarget=new StringBuilder();
+		StringBuilder sbVocabTarget = new StringBuilder();
 		sbVocabTarget.append("<unk>\n<s>\n</s>\n");
-		for(String str:setVocabTarget) {
-			sbVocabTarget.append(str+"\n");
+		for (String str : setVocabTarget) {
+			sbVocabTarget.append(str + "\n");
 		}
-		FileIO.writeStringToFile(sbVocabTarget.toString(), fopOutput+"vocab.t");
-		
+		FileIO.writeStringToFile(sbVocabTarget.toString(), fopOutput + "vocab.t");
+
 		System.out.println("finish vocab");
-		
-		
-		
+
 	}
 
 }
