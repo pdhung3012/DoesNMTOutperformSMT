@@ -26,7 +26,7 @@ public class ExtractAbbreviationFromNLCorpus {
 		return line;
 	}
 
-	public static void generateAbbrevationCorpus(String fpSource, String fpOutputSource, String fpOutputTarget,
+	public static void generateAbbrevationCorpus(String fpSource, String fpOutputSource, String fpOutputTarget,int maxLine,
 			HashSet<String> setVocabSource, HashSet<String> setVocabTarget) {
 		StringBuilder sbResultSource = new StringBuilder();
 		StringBuilder sbResultTarget = new StringBuilder();
@@ -63,6 +63,8 @@ public class ExtractAbbreviationFromNLCorpus {
 
 				sbResultSource.append(sbItemSource.toString() + "\n");
 				sbResultTarget.append(sbItemTarget.toString() + "\n");
+			
+			
 			}
 			if ((i + 1) % 100000 == 0 || i == lstInSource.length - 1) {
 				FileIO.appendStringToFile(sbResultSource.toString().trim() + "\n", fpOutputSource);
@@ -70,6 +72,11 @@ public class ExtractAbbreviationFromNLCorpus {
 				sbResultSource = new StringBuilder();
 				sbResultTarget = new StringBuilder();
 			}
+			
+			if(numAfterFilter>=maxLine) {
+				break;
+			}
+			
 		}
 		
 		System.out.println("after source: "+numAfterFilter);
@@ -172,15 +179,16 @@ public class ExtractAbbreviationFromNLCorpus {
 //		String[] arrTestText=FileIO.readFromLargeFile(fpFullTextTest).split("\n");
 
 		new File(fopOutput).mkdir();
+		int maxLine=1000000;
 
 		HashSet<String> setVocabSource = new LinkedHashSet<String>();
 		HashSet<String> setVocabTarget = new LinkedHashSet<String>();
 
-		generateAbbrevationCorpus(fpFullTextTrain, fopOutput + "train.s", fopOutput + "train.t", setVocabSource,
+		generateAbbrevationCorpus(fpFullTextTrain, fopOutput + "train.s", fopOutput + "train.t",maxLine, setVocabSource,
 				setVocabTarget);
-		generateAbbrevationCorpus(fpFullTextValid, fopOutput + "tune.s", fopOutput + "tune.t", setVocabSource,
+		generateAbbrevationCorpus(fpFullTextValid, fopOutput + "tune.s", fopOutput + "tune.t",maxLine, setVocabSource,
 				setVocabTarget);
-		generateAbbrevationCorpus(fpFullTextTest, fopOutput + "test.s", fopOutput + "test.t", setVocabSource,
+		generateAbbrevationCorpus(fpFullTextTest, fopOutput + "test.s", fopOutput + "test.t",maxLine, setVocabSource,
 				setVocabTarget);
 		System.out.println("finish corpus");
 
