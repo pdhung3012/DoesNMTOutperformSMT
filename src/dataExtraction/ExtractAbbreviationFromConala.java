@@ -15,6 +15,10 @@ import utils.FileUtil;
 
 public class ExtractAbbreviationFromConala {
 
+	public static String normalizeForConalaCorpus(String input) {
+		return input.replaceAll("'", "").replaceAll("`", "").replaceAll(":", " ").replaceAll("\\\\", " ").replaceAll("\\(", " ").replaceAll("\\)", " ").replaceAll("<unk>", "unk").replaceAll("<s>", " ").replaceAll("</s>", " ").replaceAll("\\|\\|\\|port\\|", " port ").replaceAll("[^ _a-zA-Z0-9\\-]", "").trim();
+	}
+	
 	public static String tryGetLine(BufferedReader br) {
 		String line = null;
 		try {
@@ -41,7 +45,7 @@ public class ExtractAbbreviationFromConala {
 		System.out.println("source length " + lstInSource.length);
 		int numAfterFilter = 0;
 		for (int i = 0; i < lstInSource.length; i++) {
-			String[] arrSource = lstInSource[i].trim().split("\\s+");
+			String[] arrSource = normalizeForConalaCorpus(lstInSource[i]).trim().split("\\s+");
 //			String[] arrTarget=lstInTarget[i].trim().split("\\s+");
 
 			if (arrSource.length <= 250) {
@@ -59,9 +63,13 @@ public class ExtractAbbreviationFromConala {
 					}
 
 				}
-
-				sbResultSource.append(sbItemSource.toString() + "\n");
-				sbResultTarget.append(sbItemTarget.toString() + "\n");
+				
+				if(!sbItemSource.toString().trim().isEmpty()) {
+					sbResultSource.append(sbItemSource.toString() + "\n");
+					sbResultTarget.append(sbItemTarget.toString() + "\n");
+				}
+				
+				
 			
 			
 			}
