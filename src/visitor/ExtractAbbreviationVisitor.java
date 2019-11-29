@@ -110,8 +110,8 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 				if(!arrCodeToken[i].trim().isEmpty()) {
 					String item=arrCodeToken[i].trim();
 					String abbrev=item.substring(0, numberOfAbbreviation);
-					sbAbbrevTokens.append(item+" ");
-					sbTargetTokens.append(abbrev+" ");
+					sbAbbrevTokens.append(abbrev+" ");
+					sbTargetTokens.append(item+" ");
 				}
 			}
 		}
