@@ -43,17 +43,17 @@ private static final boolean PARSE_INDIVIDUAL_SRC = false, SCAN_FILES_FRIST = fa
 //	private String[] arrPrefix;
 //	private StanfordLemmatizer lemm;
 	
-	public AbbrevSequenceGenerator(String inPath,String[] arrPrefix,StanfordLemmatizer lemm) {
+	public AbbrevSequenceGenerator(String inPath) {
 		this.inPath = inPath;
 //		this.arrPrefix=arrPrefix;
 //		this.lemm=lemm;
 	}
 	
-	public AbbrevSequenceGenerator(String inPath,String[] arrPrefix, boolean testing,StanfordLemmatizer lemm) {
-		this(inPath,arrPrefix,lemm);
-		this.testing = testing;
-		
-	}
+//	public AbbrevSequenceGenerator(String inPath,String[] arrPrefix, boolean testing,StanfordLemmatizer lemm) {
+//		this(inPath,arrPrefix,lemm);
+//		this.testing = testing;
+//		
+//	}
 	
 	public int  generateSequences(String outPath) {
 		return generateSequences(true, null, outPath);

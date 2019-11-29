@@ -104,15 +104,18 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	}
 	
 	public void buildAbbrevAndTargetTokens() {
-		String[] arrCodeToken=this.sbCodeTokens.toString().replaceAll("\n", " ").trim().split("\\s+");
-		for(int i=0;i<arrCodeToken.length;i++) {
-			if(!arrCodeToken[i].trim().isEmpty()) {
-				String item=arrCodeToken[i].trim();
-				String abbrev=item.substring(0, numberOfAbbreviation);
-				sbAbbrevTokens.append(item+" ");
-				sbTargetTokens.append(abbrev+" ");
+		String[] arrCodeToken=this.sbCodeTokens.toString().replaceAll( "\n", " ").trim().split( "\\s+");
+		if(arrCodeToken.length>=1 && arrCodeToken[0].equals( "{") && arrCodeToken[arrCodeToken.length-1].equals( "}")) {
+			for(int i=1;i<arrCodeToken.length-1;i++) {
+				if(!arrCodeToken[i].trim().isEmpty()) {
+					String item=arrCodeToken[i].trim();
+					String abbrev=item.substring(0, numberOfAbbreviation);
+					sbAbbrevTokens.append(item+" ");
+					sbTargetTokens.append(abbrev+" ");
+				}
 			}
 		}
+		
 		
 		
 	}
@@ -130,7 +133,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 		String[] filePaths = utils.FileIO.findAllJavaFiles(projectLocation);
 		String[] sources = { projectLocation + File.separator };
 		// System.out.println(f.getParentFile().getAbsolutePath());
-		// System.out.println("jdk :" +this.jdkPath);
+		// System.out.println( "jdk :" +this.jdkPath);
 		ASTParser parser = ASTParser.newParser(AST.JLS8);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
@@ -190,7 +193,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 					+ getDimensions(t.getDimensions());
 		} else if (type.isIntersectionType()) {
 			IntersectionType it = (IntersectionType) type;
-			@SuppressWarnings("unchecked")
+			@SuppressWarnings( "unchecked")
 			ArrayList<Type> types = new ArrayList<>(it.types());
 			String s = getUnresolvedType(types.get(0));
 			for (int i = 1; i < types.size(); i++)
@@ -201,7 +204,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 			return getUnresolvedType(t.getType());
 		} else if (type.isUnionType()) {
 			UnionType it = (UnionType) type;
-			@SuppressWarnings("unchecked")
+			@SuppressWarnings( "unchecked")
 			ArrayList<Type> types = new ArrayList<>(it.types());
 			String s = getUnresolvedType(types.get(0));
 			for (int i = 1; i < types.size(); i++)
@@ -209,13 +212,13 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 			return s;
 		} else if (type.isNameQualifiedType()) {
 			NameQualifiedType qt = (NameQualifiedType) type;
-			return qt.getQualifier().getFullyQualifiedName() + "."
+			return qt.getQualifier().getFullyQualifiedName() + " . "
 					+ qt.getName().getIdentifier();
 		} else if (type.isPrimitiveType()) {
 			return type.toString();
 		} else if (type.isQualifiedType()) {
 			QualifiedType qt = (QualifiedType) type;
-			return getUnresolvedType(qt.getQualifier()) + "."
+			return getUnresolvedType(qt.getQualifier()) + " . "
 					+ qt.getName().getIdentifier();
 		} else if (type.isSimpleType()) {
 			return type.toString();
@@ -303,7 +306,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 
 	void printIndent() {
 		for (int i = 0; i < this.indent; i++)
-			this.sbCodeTokens.append("  "); //$NON-NLS-1$
+			this.sbCodeTokens.append( "  "); //$NON-NLS-1$
 	}
 
 	/**
@@ -314,37 +317,37 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	void printModifiers(int modifiers) {
 		if (Modifier.isPublic(modifiers)) {
-			this.sbCodeTokens.append("public ");//$NON-NLS-1$
+			this.sbCodeTokens.append( "public ");//$NON-NLS-1$
 		}
 		if (Modifier.isProtected(modifiers)) {
-			this.sbCodeTokens.append("protected ");//$NON-NLS-1$
+			this.sbCodeTokens.append( "protected ");//$NON-NLS-1$
 		}
 		if (Modifier.isPrivate(modifiers)) {
-			this.sbCodeTokens.append("private ");//$NON-NLS-1$
+			this.sbCodeTokens.append( "private ");//$NON-NLS-1$
 		}
 		if (Modifier.isStatic(modifiers)) {
-			this.sbCodeTokens.append("static ");//$NON-NLS-1$
+			this.sbCodeTokens.append( "static ");//$NON-NLS-1$
 		}
 		if (Modifier.isAbstract(modifiers)) {
-			this.sbCodeTokens.append("abstract ");//$NON-NLS-1$
+			this.sbCodeTokens.append( "abstract ");//$NON-NLS-1$
 		}
 		if (Modifier.isFinal(modifiers)) {
-			this.sbCodeTokens.append("final ");//$NON-NLS-1$
+			this.sbCodeTokens.append( "final ");//$NON-NLS-1$
 		}
 		if (Modifier.isSynchronized(modifiers)) {
-			this.sbCodeTokens.append("synchronized ");//$NON-NLS-1$
+			this.sbCodeTokens.append( "synchronized ");//$NON-NLS-1$
 		}
 		if (Modifier.isVolatile(modifiers)) {
-			this.sbCodeTokens.append("volatile ");//$NON-NLS-1$
+			this.sbCodeTokens.append( "volatile ");//$NON-NLS-1$
 		}
 		if (Modifier.isNative(modifiers)) {
-			this.sbCodeTokens.append("native ");//$NON-NLS-1$
+			this.sbCodeTokens.append( "native ");//$NON-NLS-1$
 		}
 		if (Modifier.isStrictfp(modifiers)) {
-			this.sbCodeTokens.append("strictfp ");//$NON-NLS-1$
+			this.sbCodeTokens.append( "strictfp ");//$NON-NLS-1$
 		}
 		if (Modifier.isTransient(modifiers)) {
-			this.sbCodeTokens.append("transient ");//$NON-NLS-1$
+			this.sbCodeTokens.append( "transient ");//$NON-NLS-1$
 		}
 	}
 
@@ -359,7 +362,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 		for (Iterator it = ext.iterator(); it.hasNext(); ) {
 			ASTNode p = (ASTNode) it.next();
 			p.accept(this);
-			this.sbCodeTokens.append(" ");//$NON-NLS-1$
+			this.sbCodeTokens.append( " ");//$NON-NLS-1$
 		}
 	}
 
@@ -370,7 +373,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 * @param typeArguments list of type arguments 
 	 */
 	private void visitReferenceTypeArguments(List typeArguments) {
-		this.sbCodeTokens.append("::");//$NON-NLS-1$
+		this.sbCodeTokens.append( "::");//$NON-NLS-1$
 		if (!typeArguments.isEmpty()) {
 			this.sbCodeTokens.append('<');
 			for (Iterator it = typeArguments.iterator(); it.hasNext(); ) {
@@ -436,14 +439,14 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 		}
 		printIndent();
 		printModifiers(node.modifiers());
-		this.sbCodeTokens.append("@interface ");//$NON-NLS-1$
+		this.sbCodeTokens.append( "@interface ");//$NON-NLS-1$
 		node.getName().accept(this);
-		this.sbCodeTokens.append(" {");//$NON-NLS-1$
+		this.sbCodeTokens.append( " {");//$NON-NLS-1$
 		for (Iterator it = node.bodyDeclarations().iterator(); it.hasNext(); ) {
 			BodyDeclaration d = (BodyDeclaration) it.next();
 			d.accept(this);
 		}
-		this.sbCodeTokens.append("}\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( "}\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -458,14 +461,14 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 		printIndent();
 		printModifiers(node.modifiers());
 		node.getType().accept(this);
-		this.sbCodeTokens.append(" ");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ");//$NON-NLS-1$
 		node.getName().accept(this);
-		this.sbCodeTokens.append("()");//$NON-NLS-1$
+		this.sbCodeTokens.append( "()");//$NON-NLS-1$
 		if (node.getDefault() != null) {
-			this.sbCodeTokens.append(" default ");//$NON-NLS-1$
+			this.sbCodeTokens.append( " default ");//$NON-NLS-1$
 			node.getDefault().accept(this);
 		}
-		this.sbCodeTokens.append(";\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ;\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -473,7 +476,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 * @see ASTVisitor#visit(AnonymousClassDeclaration)
 	 */
 	public boolean visit(AnonymousClassDeclaration node) {
-		this.sbCodeTokens.append("{\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( "{\n");//$NON-NLS-1$
 		this.indent++;
 		for (Iterator it = node.bodyDeclarations().iterator(); it.hasNext(); ) {
 			BodyDeclaration b = (BodyDeclaration) it.next();
@@ -481,7 +484,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 		}
 		this.indent--;
 		printIndent();
-		this.sbCodeTokens.append("}\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( "}\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -490,9 +493,9 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(ArrayAccess node) {
 		node.getArray().accept(this);
-		this.sbCodeTokens.append("[");//$NON-NLS-1$
+		this.sbCodeTokens.append( "[");//$NON-NLS-1$
 		node.getIndex().accept(this);
-		this.sbCodeTokens.append("]");//$NON-NLS-1$
+		this.sbCodeTokens.append( "]");//$NON-NLS-1$
 		return false;
 	}
 
@@ -500,21 +503,21 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 * @see ASTVisitor#visit(ArrayCreation)
 	 */
 	public boolean visit(ArrayCreation node) {
-		this.sbCodeTokens.append("new ");//$NON-NLS-1$
+		this.sbCodeTokens.append( "new ");//$NON-NLS-1$
 		ArrayType at = node.getType();
 		int dims = at.getDimensions();
 		Type elementType = at.getElementType();
 		elementType.accept(this);
 		for (Iterator it = node.dimensions().iterator(); it.hasNext(); ) {
-			this.sbCodeTokens.append("[");//$NON-NLS-1$
+			this.sbCodeTokens.append( "[");//$NON-NLS-1$
 			Expression e = (Expression) it.next();
 			e.accept(this);
-			this.sbCodeTokens.append("]");//$NON-NLS-1$
+			this.sbCodeTokens.append( "]");//$NON-NLS-1$
 			dims--;
 		}
 		// add empty "[]" for each extra array dimension
 		for (int i= 0; i < dims; i++) {
-			this.sbCodeTokens.append("[]");//$NON-NLS-1$
+			this.sbCodeTokens.append( "[]");//$NON-NLS-1$
 		}
 		if (node.getInitializer() != null) {
 			node.getInitializer().accept(this);
@@ -526,15 +529,15 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 * @see ASTVisitor#visit(ArrayInitializer)
 	 */
 	public boolean visit(ArrayInitializer node) {
-		this.sbCodeTokens.append("{");//$NON-NLS-1$
+		this.sbCodeTokens.append( "{");//$NON-NLS-1$
 		for (Iterator it = node.expressions().iterator(); it.hasNext(); ) {
 			Expression e = (Expression) it.next();
 			e.accept(this);
 			if (it.hasNext()) {
-				this.sbCodeTokens.append(",");//$NON-NLS-1$
+				this.sbCodeTokens.append( ",");//$NON-NLS-1$
 			}
 		}
-		this.sbCodeTokens.append("}");//$NON-NLS-1$
+		this.sbCodeTokens.append( "}");//$NON-NLS-1$
 		return false;
 	}
 
@@ -544,7 +547,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	public boolean visit(ArrayType node) {
 		if (node.getAST().apiLevel() < AST.JLS8) {
 			visitComponentType(node);
-			this.sbCodeTokens.append("[]");//$NON-NLS-1$
+			this.sbCodeTokens.append( "[]");//$NON-NLS-1$
 		} else {
 			node.getElementType().accept(this);
 			List dimensions = node.dimensions();
@@ -562,13 +565,13 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(AssertStatement node) {
 		printIndent();
-		this.sbCodeTokens.append("assert ");//$NON-NLS-1$
+		this.sbCodeTokens.append( "assert ");//$NON-NLS-1$
 		node.getExpression().accept(this);
 		if (node.getMessage() != null) {
-			this.sbCodeTokens.append(" : ");//$NON-NLS-1$
+			this.sbCodeTokens.append( " : ");//$NON-NLS-1$
 			node.getMessage().accept(this);
 		}
-		this.sbCodeTokens.append(";\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( "  ;\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -577,7 +580,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(Assignment node) {
 		node.getLeftHandSide().accept(this);
-		this.sbCodeTokens.append(node.getOperator().toString());
+		this.sbCodeTokens.append( " "+node.getOperator().toString()+" ");
 		node.getRightHandSide().accept(this);
 		return false;
 	}
@@ -586,7 +589,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 * @see ASTVisitor#visit(Block)
 	 */
 	public boolean visit(Block node) {
-		this.sbCodeTokens.append("{\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( "{\n");//$NON-NLS-1$
 		this.indent++;
 		for (Iterator it = node.statements().iterator(); it.hasNext(); ) {
 			Statement s = (Statement) it.next();
@@ -594,7 +597,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 		}
 		this.indent--;
 		printIndent();
-		this.sbCodeTokens.append("}\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( "}\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -604,7 +607,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(BlockComment node) {
 		printIndent();
-		this.sbCodeTokens.append("/* */");//$NON-NLS-1$
+		this.sbCodeTokens.append( "/* */");//$NON-NLS-1$
 		return false;
 	}
 
@@ -613,9 +616,9 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(BooleanLiteral node) {
 		if (node.booleanValue() == true) {
-			this.sbCodeTokens.append("true");//$NON-NLS-1$
+			this.sbCodeTokens.append( "true");//$NON-NLS-1$
 		} else {
-			this.sbCodeTokens.append("false");//$NON-NLS-1$
+			this.sbCodeTokens.append( "false");//$NON-NLS-1$
 		}
 		return false;
 	}
@@ -625,12 +628,12 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(BreakStatement node) {
 		printIndent();
-		this.sbCodeTokens.append("break");//$NON-NLS-1$
+		this.sbCodeTokens.append( "break");//$NON-NLS-1$
 		if (node.getLabel() != null) {
-			this.sbCodeTokens.append(" ");//$NON-NLS-1$
+			this.sbCodeTokens.append( " ");//$NON-NLS-1$
 			node.getLabel().accept(this);
 		}
-		this.sbCodeTokens.append(";\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ;\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -638,9 +641,9 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 * @see ASTVisitor#visit(CastExpression)
 	 */
 	public boolean visit(CastExpression node) {
-		this.sbCodeTokens.append("(");//$NON-NLS-1$
+		this.sbCodeTokens.append( "( ");//$NON-NLS-1$
 		node.getType().accept(this);
-		this.sbCodeTokens.append(")");//$NON-NLS-1$
+		this.sbCodeTokens.append( ")");//$NON-NLS-1$
 		node.getExpression().accept(this);
 		return false;
 	}
@@ -649,9 +652,9 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 * @see ASTVisitor#visit(CatchClause)
 	 */
 	public boolean visit(CatchClause node) {
-		this.sbCodeTokens.append("catch (");//$NON-NLS-1$
+		this.sbCodeTokens.append( "catch ( ");//$NON-NLS-1$
 		node.getException().accept(this);
-		this.sbCodeTokens.append(") ");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ) ");//$NON-NLS-1$
 		node.getBody().accept(this);
 		return false;
 	}
@@ -670,35 +673,35 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	public boolean visit(ClassInstanceCreation node) {
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
-			this.sbCodeTokens.append(".");//$NON-NLS-1$
+			this.sbCodeTokens.append( " . ");//$NON-NLS-1$
 		}
-		this.sbCodeTokens.append("new ");//$NON-NLS-1$
+		this.sbCodeTokens.append( " new ");//$NON-NLS-1$
 		if (node.getAST().apiLevel() == JLS2) {
 			getName(node).accept(this);
 		}
 		if (node.getAST().apiLevel() >= JLS3) {
 			if (!node.typeArguments().isEmpty()) {
-				this.sbCodeTokens.append("<");//$NON-NLS-1$
+				this.sbCodeTokens.append( " < ");//$NON-NLS-1$
 				for (Iterator it = node.typeArguments().iterator(); it.hasNext(); ) {
 					Type t = (Type) it.next();
 					t.accept(this);
 					if (it.hasNext()) {
-						this.sbCodeTokens.append(",");//$NON-NLS-1$
+						this.sbCodeTokens.append( " , ");//$NON-NLS-1$
 					}
 				}
-				this.sbCodeTokens.append(">");//$NON-NLS-1$
+				this.sbCodeTokens.append( " > ");//$NON-NLS-1$
 			}
 			node.getType().accept(this);
 		}
-		this.sbCodeTokens.append("(");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ( ");//$NON-NLS-1$
 		for (Iterator it = node.arguments().iterator(); it.hasNext(); ) {
 			Expression e = (Expression) it.next();
 			e.accept(this);
 			if (it.hasNext()) {
-				this.sbCodeTokens.append(",");//$NON-NLS-1$
+				this.sbCodeTokens.append( " , ");//$NON-NLS-1$
 			}
 		}
-		this.sbCodeTokens.append(")");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ) ");//$NON-NLS-1$
 		if (node.getAnonymousClassDeclaration() != null) {
 			node.getAnonymousClassDeclaration().accept(this);
 		}
@@ -728,9 +731,9 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(ConditionalExpression node) {
 		node.getExpression().accept(this);
-		this.sbCodeTokens.append(" ? ");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ? ");//$NON-NLS-1$
 		node.getThenExpression().accept(this);
-		this.sbCodeTokens.append(" : ");//$NON-NLS-1$
+		this.sbCodeTokens.append( " : ");//$NON-NLS-1$
 		node.getElseExpression().accept(this);
 		return false;
 	}
@@ -742,26 +745,26 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 		printIndent();
 		if (node.getAST().apiLevel() >= JLS3) {
 			if (!node.typeArguments().isEmpty()) {
-				this.sbCodeTokens.append("<");//$NON-NLS-1$
+				this.sbCodeTokens.append( " < ");//$NON-NLS-1$
 				for (Iterator it = node.typeArguments().iterator(); it.hasNext(); ) {
 					Type t = (Type) it.next();
 					t.accept(this);
 					if (it.hasNext()) {
-						this.sbCodeTokens.append(",");//$NON-NLS-1$
+						this.sbCodeTokens.append( " , ");//$NON-NLS-1$
 					}
 				}
-				this.sbCodeTokens.append(">");//$NON-NLS-1$
+				this.sbCodeTokens.append( " > ");//$NON-NLS-1$
 			}
 		}
-		this.sbCodeTokens.append("this(");//$NON-NLS-1$
+		this.sbCodeTokens.append( " this ( ");//$NON-NLS-1$
 		for (Iterator it = node.arguments().iterator(); it.hasNext(); ) {
 			Expression e = (Expression) it.next();
 			e.accept(this);
 			if (it.hasNext()) {
-				this.sbCodeTokens.append(",");//$NON-NLS-1$
+				this.sbCodeTokens.append( " , ");//$NON-NLS-1$
 			}
 		}
-		this.sbCodeTokens.append(");\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( " )  ;\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -770,12 +773,12 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(ContinueStatement node) {
 		printIndent();
-		this.sbCodeTokens.append("continue");//$NON-NLS-1$
+		this.sbCodeTokens.append( "continue");//$NON-NLS-1$
 		if (node.getLabel() != null) {
-			this.sbCodeTokens.append(" ");//$NON-NLS-1$
+			this.sbCodeTokens.append( " ");//$NON-NLS-1$
 			node.getLabel().accept(this);
 		}
-		this.sbCodeTokens.append(";\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( "  ;\n");//$NON-NLS-1$
 		return false;
 	}
 	
@@ -787,7 +790,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	public boolean visit(CreationReference node) {
 		node.getType().accept(this);
 		visitReferenceTypeArguments(node.typeArguments());
-		this.sbCodeTokens.append("new");//$NON-NLS-1$
+		this.sbCodeTokens.append( "new");//$NON-NLS-1$
 		return false;
 	}
 
@@ -796,7 +799,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 		if (annotations.size() > 0)
 			this.sbCodeTokens.append(' ');
 		visitAnnotationsList(annotations);
-		this.sbCodeTokens.append("[]"); //$NON-NLS-1$
+		this.sbCodeTokens.append( "[]"); //$NON-NLS-1$
 		return false;
 	}
 
@@ -805,11 +808,11 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(DoStatement node) {
 		printIndent();
-		this.sbCodeTokens.append("do ");//$NON-NLS-1$
+		this.sbCodeTokens.append( "do ");//$NON-NLS-1$
 		node.getBody().accept(this);
-		this.sbCodeTokens.append(" while (");//$NON-NLS-1$
+		this.sbCodeTokens.append( " while ( ");//$NON-NLS-1$
 		node.getExpression().accept(this);
-		this.sbCodeTokens.append(");\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( ")  ;\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -818,7 +821,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(EmptyStatement node) {
 		printIndent();
-		this.sbCodeTokens.append(";\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( "  ;\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -828,11 +831,11 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(EnhancedForStatement node) {
 		printIndent();
-		this.sbCodeTokens.append("for (");//$NON-NLS-1$
+		this.sbCodeTokens.append( "for ( ");//$NON-NLS-1$
 		node.getParameter().accept(this);
-		this.sbCodeTokens.append(" : ");//$NON-NLS-1$
+		this.sbCodeTokens.append( " : ");//$NON-NLS-1$
 		node.getExpression().accept(this);
-		this.sbCodeTokens.append(") ");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ) ");//$NON-NLS-1$
 		node.getBody().accept(this);
 		return false;
 	}
@@ -849,15 +852,15 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 		printModifiers(node.modifiers());
 		node.getName().accept(this);
 		if (!node.arguments().isEmpty()) {
-			this.sbCodeTokens.append("(");//$NON-NLS-1$
+			this.sbCodeTokens.append( "( ");//$NON-NLS-1$
 			for (Iterator it = node.arguments().iterator(); it.hasNext(); ) {
 				Expression e = (Expression) it.next();
 				e.accept(this);
 				if (it.hasNext()) {
-					this.sbCodeTokens.append(",");//$NON-NLS-1$
+					this.sbCodeTokens.append( ",");//$NON-NLS-1$
 				}
 			}
-			this.sbCodeTokens.append(")");//$NON-NLS-1$
+			this.sbCodeTokens.append( ")");//$NON-NLS-1$
 		}
 		if (node.getAnonymousClassDeclaration() != null) {
 			node.getAnonymousClassDeclaration().accept(this);
@@ -875,39 +878,39 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 		}
 		printIndent();
 		printModifiers(node.modifiers());
-		this.sbCodeTokens.append("enum ");//$NON-NLS-1$
+		this.sbCodeTokens.append( "enum ");//$NON-NLS-1$
 		node.getName().accept(this);
-		this.sbCodeTokens.append(" ");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ");//$NON-NLS-1$
 		if (!node.superInterfaceTypes().isEmpty()) {
-			this.sbCodeTokens.append("implements ");//$NON-NLS-1$
+			this.sbCodeTokens.append( "implements ");//$NON-NLS-1$
 			for (Iterator it = node.superInterfaceTypes().iterator(); it.hasNext(); ) {
 				Type t = (Type) it.next();
 				t.accept(this);
 				if (it.hasNext()) {
-					this.sbCodeTokens.append(", ");//$NON-NLS-1$
+					this.sbCodeTokens.append( ", ");//$NON-NLS-1$
 				}
 			}
-			this.sbCodeTokens.append(" ");//$NON-NLS-1$
+			this.sbCodeTokens.append( " ");//$NON-NLS-1$
 		}
-		this.sbCodeTokens.append("{");//$NON-NLS-1$
+		this.sbCodeTokens.append( "{");//$NON-NLS-1$
 		for (Iterator it = node.enumConstants().iterator(); it.hasNext(); ) {
 			EnumConstantDeclaration d = (EnumConstantDeclaration) it.next();
 			d.accept(this);
 			// enum constant declarations do not include punctuation
 			if (it.hasNext()) {
 				// enum constant declarations are separated by commas
-				this.sbCodeTokens.append(", ");//$NON-NLS-1$
+				this.sbCodeTokens.append( ", ");//$NON-NLS-1$
 			}
 		}
 		if (!node.bodyDeclarations().isEmpty()) {
-			this.sbCodeTokens.append("; ");//$NON-NLS-1$
+			this.sbCodeTokens.append( "; ");//$NON-NLS-1$
 			for (Iterator it = node.bodyDeclarations().iterator(); it.hasNext(); ) {
 				BodyDeclaration d = (BodyDeclaration) it.next();
 				d.accept(this);
 				// other body declarations include trailing punctuation
 			}
 		}
-		this.sbCodeTokens.append("}\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( "}\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -929,7 +932,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	public boolean visit(ExpressionStatement node) {
 		printIndent();
 		node.getExpression().accept(this);
-		this.sbCodeTokens.append(";\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( "  ;\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -938,7 +941,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(FieldAccess node) {
 		node.getExpression().accept(this);
-		this.sbCodeTokens.append(".");//$NON-NLS-1$
+		this.sbCodeTokens.append( " . ");//$NON-NLS-1$
 		node.getName().accept(this);
 		return false;
 	}
@@ -958,15 +961,15 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 			printModifiers(node.modifiers());
 		}
 		node.getType().accept(this);
-		this.sbCodeTokens.append(" ");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ");//$NON-NLS-1$
 		for (Iterator it = node.fragments().iterator(); it.hasNext(); ) {
 			VariableDeclarationFragment f = (VariableDeclarationFragment) it.next();
 			f.accept(this);
 			if (it.hasNext()) {
-				this.sbCodeTokens.append(", ");//$NON-NLS-1$
+				this.sbCodeTokens.append( ", ");//$NON-NLS-1$
 			}
 		}
-		this.sbCodeTokens.append(";\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ; \n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -975,23 +978,23 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(ForStatement node) {
 		printIndent();
-		this.sbCodeTokens.append("for (");//$NON-NLS-1$
+		this.sbCodeTokens.append( "for ( ");//$NON-NLS-1$
 		for (Iterator it = node.initializers().iterator(); it.hasNext(); ) {
 			Expression e = (Expression) it.next();
 			e.accept(this);
-			if (it.hasNext()) this.sbCodeTokens.append(", ");//$NON-NLS-1$
+			if (it.hasNext()) this.sbCodeTokens.append( ", ");//$NON-NLS-1$
 		}
-		this.sbCodeTokens.append("; ");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ; ");//$NON-NLS-1$
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
 		}
-		this.sbCodeTokens.append("; ");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ; ");//$NON-NLS-1$
 		for (Iterator it = node.updaters().iterator(); it.hasNext(); ) {
 			Expression e = (Expression) it.next();
 			e.accept(this);
-			if (it.hasNext()) this.sbCodeTokens.append(", ");//$NON-NLS-1$
+			if (it.hasNext()) this.sbCodeTokens.append( ", ");//$NON-NLS-1$
 		}
-		this.sbCodeTokens.append(") ");//$NON-NLS-1$
+		this.sbCodeTokens.append( ") ");//$NON-NLS-1$
 		node.getBody().accept(this);
 		return false;
 	}
@@ -1001,12 +1004,12 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(IfStatement node) {
 		printIndent();
-		this.sbCodeTokens.append("if (");//$NON-NLS-1$
+		this.sbCodeTokens.append( "if ( ");//$NON-NLS-1$
 		node.getExpression().accept(this);
-		this.sbCodeTokens.append(") ");//$NON-NLS-1$
+		this.sbCodeTokens.append( ") ");//$NON-NLS-1$
 		node.getThenStatement().accept(this);
 		if (node.getElseStatement() != null) {
-			this.sbCodeTokens.append(" else ");//$NON-NLS-1$
+			this.sbCodeTokens.append( " else ");//$NON-NLS-1$
 			node.getElseStatement().accept(this);
 		}
 		return false;
@@ -1017,17 +1020,17 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(ImportDeclaration node) {
 		printIndent();
-		this.sbCodeTokens.append("import ");//$NON-NLS-1$
+		this.sbCodeTokens.append( "import ");//$NON-NLS-1$
 		if (node.getAST().apiLevel() >= JLS3) {
 			if (node.isStatic()) {
-				this.sbCodeTokens.append("static ");//$NON-NLS-1$
+				this.sbCodeTokens.append( "static ");//$NON-NLS-1$
 			}
 		}
 		node.getName().accept(this);
 		if (node.isOnDemand()) {
-			this.sbCodeTokens.append(".*");//$NON-NLS-1$
+			this.sbCodeTokens.append( ".*");//$NON-NLS-1$
 		}
-		this.sbCodeTokens.append(";\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ;\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1074,7 +1077,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(InstanceofExpression node) {
 		node.getLeftOperand().accept(this);
-		this.sbCodeTokens.append(" instanceof ");//$NON-NLS-1$
+		this.sbCodeTokens.append( " instanceof ");//$NON-NLS-1$
 		node.getRightOperand().accept(this);
 		return false;
 	}
@@ -1088,7 +1091,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 			Type t = (Type) it.next();
 			t.accept(this);
 			if (it.hasNext()) {
-				this.sbCodeTokens.append(" & "); //$NON-NLS-1$
+				this.sbCodeTokens.append( " & "); //$NON-NLS-1$
 			}
 		}
 		return false;
@@ -1099,12 +1102,12 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(Javadoc node) {
 		printIndent();
-		this.sbCodeTokens.append("/** ");//$NON-NLS-1$
+		this.sbCodeTokens.append( "/** ");//$NON-NLS-1$
 		for (Iterator it = node.tags().iterator(); it.hasNext(); ) {
 			ASTNode e = (ASTNode) it.next();
 			e.accept(this);
 		}
-		this.sbCodeTokens.append("\n */\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( "\n */\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1114,7 +1117,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	public boolean visit(LabeledStatement node) {
 		printIndent();
 		node.getLabel().accept(this);
-		this.sbCodeTokens.append(": ");//$NON-NLS-1$
+		this.sbCodeTokens.append( ": ");//$NON-NLS-1$
 		node.getBody().accept(this);
 		return false;
 	}
@@ -1130,12 +1133,12 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 			VariableDeclaration v = (VariableDeclaration) it.next();
 			v.accept(this);
 			if (it.hasNext()) {
-				this.sbCodeTokens.append(",");//$NON-NLS-1$
+				this.sbCodeTokens.append( ",");//$NON-NLS-1$
 			}
 		}
 		if (hasParentheses)
 			this.sbCodeTokens.append(')');
-		this.sbCodeTokens.append(" -> "); //$NON-NLS-1$
+		this.sbCodeTokens.append( " -> "); //$NON-NLS-1$
 		node.getBody().accept(this);
 		return false;
 	}
@@ -1145,7 +1148,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 * @since 3.0
 	 */
 	public boolean visit(LineComment node) {
-		this.sbCodeTokens.append("//\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( "//\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1154,7 +1157,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 * @since 3.1
 	 */
 	public boolean visit(MarkerAnnotation node) {
-		this.sbCodeTokens.append("@");//$NON-NLS-1$
+		this.sbCodeTokens.append( "@");//$NON-NLS-1$
 		node.getTypeName().accept(this);
 		return false;
 	}
@@ -1167,7 +1170,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 		if (node.getQualifier() != null) {
 			node.getQualifier().accept(this);
 		}
-		this.sbCodeTokens.append("#");//$NON-NLS-1$
+		this.sbCodeTokens.append( "#");//$NON-NLS-1$
 		node.getName().accept(this);
 		return false;
 	}
@@ -1178,7 +1181,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(MemberValuePair node) {
 		node.getName().accept(this);
-		this.sbCodeTokens.append("=");//$NON-NLS-1$
+		this.sbCodeTokens.append( "=");//$NON-NLS-1$
 		node.getValue().accept(this);
 		return false;
 	}
@@ -1191,31 +1194,31 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	public boolean visit(MethodInvocation node) {
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
-			this.sbCodeTokens.append(".");//$NON-NLS-1$
+			this.sbCodeTokens.append( " . ");//$NON-NLS-1$
 		}
 		if (node.getAST().apiLevel() >= JLS3) {
 			if (!node.typeArguments().isEmpty()) {
-				this.sbCodeTokens.append("<");//$NON-NLS-1$
+				this.sbCodeTokens.append( " < ");//$NON-NLS-1$
 				for (Iterator it = node.typeArguments().iterator(); it.hasNext(); ) {
 					Type t = (Type) it.next();
 					t.accept(this);
 					if (it.hasNext()) {
-						this.sbCodeTokens.append(",");//$NON-NLS-1$
+						this.sbCodeTokens.append( " , ");//$NON-NLS-1$
 					}
 				}
-				this.sbCodeTokens.append(">");//$NON-NLS-1$
+				this.sbCodeTokens.append( " > ");//$NON-NLS-1$
 			}
 		}
 		node.getName().accept(this);
-		this.sbCodeTokens.append("(");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ( ");//$NON-NLS-1$
 		for (Iterator it = node.arguments().iterator(); it.hasNext(); ) {
 			Expression e = (Expression) it.next();
 			e.accept(this);
 			if (it.hasNext()) {
-				this.sbCodeTokens.append(",");//$NON-NLS-1$
+				this.sbCodeTokens.append( " , ");//$NON-NLS-1$
 			}
 		}
-		this.sbCodeTokens.append(")");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ) ");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1227,17 +1230,17 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 		if (node.getQualifier() != null) {
 			node.getQualifier().accept(this);
 		}
-		this.sbCodeTokens.append("#");//$NON-NLS-1$
+		this.sbCodeTokens.append( "#");//$NON-NLS-1$
 		node.getName().accept(this);
-		this.sbCodeTokens.append("(");//$NON-NLS-1$
+		this.sbCodeTokens.append( "( ");//$NON-NLS-1$
 		for (Iterator it = node.parameters().iterator(); it.hasNext(); ) {
 			MethodRefParameter e = (MethodRefParameter) it.next();
 			e.accept(this);
 			if (it.hasNext()) {
-				this.sbCodeTokens.append(",");//$NON-NLS-1$
+				this.sbCodeTokens.append( ",");//$NON-NLS-1$
 			}
 		}
-		this.sbCodeTokens.append(")");//$NON-NLS-1$
+		this.sbCodeTokens.append( ")");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1249,11 +1252,11 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 		node.getType().accept(this);
 		if (node.getAST().apiLevel() >= JLS3) {
 			if (node.isVarargs()) {
-				this.sbCodeTokens.append("...");//$NON-NLS-1$
+				this.sbCodeTokens.append( "...");//$NON-NLS-1$
 			}
 		}
 		if (node.getName() != null) {
-			this.sbCodeTokens.append(" ");//$NON-NLS-1$
+			this.sbCodeTokens.append( " ");//$NON-NLS-1$
 			node.getName().accept(this);
 		}
 		return false;
@@ -1285,17 +1288,17 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 * @since 3.1
 	 */
 	public boolean visit(NormalAnnotation node) {
-		this.sbCodeTokens.append("@");//$NON-NLS-1$
+		this.sbCodeTokens.append( "@");//$NON-NLS-1$
 		node.getTypeName().accept(this);
-		this.sbCodeTokens.append("(");//$NON-NLS-1$
+		this.sbCodeTokens.append( "( ");//$NON-NLS-1$
 		for (Iterator it = node.values().iterator(); it.hasNext(); ) {
 			MemberValuePair p = (MemberValuePair) it.next();
 			p.accept(this);
 			if (it.hasNext()) {
-				this.sbCodeTokens.append(",");//$NON-NLS-1$
+				this.sbCodeTokens.append( ",");//$NON-NLS-1$
 			}
 		}
-		this.sbCodeTokens.append(")");//$NON-NLS-1$
+		this.sbCodeTokens.append( ")");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1303,7 +1306,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 * @see ASTVisitor#visit(NullLiteral)
 	 */
 	public boolean visit(NullLiteral node) {
-		this.sbCodeTokens.append("null");//$NON-NLS-1$
+		this.sbCodeTokens.append( "null");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1326,13 +1329,13 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 			for (Iterator it = node.annotations().iterator(); it.hasNext(); ) {
 				Annotation p = (Annotation) it.next();
 				p.accept(this);
-				this.sbCodeTokens.append(" ");//$NON-NLS-1$
+				this.sbCodeTokens.append( " ");//$NON-NLS-1$
 			}
 		}
 		printIndent();
-		this.sbCodeTokens.append("package ");//$NON-NLS-1$
+		this.sbCodeTokens.append( "package ");//$NON-NLS-1$
 		node.getName().accept(this);
-		this.sbCodeTokens.append(";\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ;\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1342,15 +1345,15 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(ParameterizedType node) {
 		node.getType().accept(this);
-		this.sbCodeTokens.append("<");//$NON-NLS-1$
+		this.sbCodeTokens.append( "<");//$NON-NLS-1$
 		for (Iterator it = node.typeArguments().iterator(); it.hasNext(); ) {
 			Type t = (Type) it.next();
 			t.accept(this);
 			if (it.hasNext()) {
-				this.sbCodeTokens.append(",");//$NON-NLS-1$
+				this.sbCodeTokens.append( ",");//$NON-NLS-1$
 			}
 		}
-		this.sbCodeTokens.append(">");//$NON-NLS-1$
+		this.sbCodeTokens.append( ">");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1358,9 +1361,9 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 * @see ASTVisitor#visit(ParenthesizedExpression)
 	 */
 	public boolean visit(ParenthesizedExpression node) {
-		this.sbCodeTokens.append("(");//$NON-NLS-1$
+		this.sbCodeTokens.append( "( ");//$NON-NLS-1$
 		node.getExpression().accept(this);
-		this.sbCodeTokens.append(")");//$NON-NLS-1$
+		this.sbCodeTokens.append( ")");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1396,7 +1399,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(QualifiedName node) {
 		node.getQualifier().accept(this);
-		this.sbCodeTokens.append(".");//$NON-NLS-1$
+		this.sbCodeTokens.append( " . ");//$NON-NLS-1$
 		node.getName().accept(this);
 		return false;
 	}
@@ -1407,7 +1410,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(QualifiedType node) {
 		node.getQualifier().accept(this);
-		this.sbCodeTokens.append(".");//$NON-NLS-1$
+		this.sbCodeTokens.append( " . ");//$NON-NLS-1$
 		visitTypeAnnotations(node);
 		node.getName().accept(this);
 		return false;
@@ -1418,12 +1421,12 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(ReturnStatement node) {
 		printIndent();
-		this.sbCodeTokens.append("return");//$NON-NLS-1$
+		this.sbCodeTokens.append( "return");//$NON-NLS-1$
 		if (node.getExpression() != null) {
-			this.sbCodeTokens.append(" ");//$NON-NLS-1$
+			this.sbCodeTokens.append( " ");//$NON-NLS-1$
 			node.getExpression().accept(this);
 		}
-		this.sbCodeTokens.append(";\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ;\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1431,7 +1434,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 * @see ASTVisitor#visit(SimpleName)
 	 */
 	public boolean visit(SimpleName node) {
-		this.sbCodeTokens.append(node.getIdentifier());
+		this.sbCodeTokens.append( " "+node.getIdentifier());
 		return false;
 	}
 
@@ -1449,11 +1452,11 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 * @since 3.1
 	 */
 	public boolean visit(SingleMemberAnnotation node) {
-		this.sbCodeTokens.append("@");//$NON-NLS-1$
+		this.sbCodeTokens.append( "@");//$NON-NLS-1$
 		node.getTypeName().accept(this);
-		this.sbCodeTokens.append("(");//$NON-NLS-1$
+		this.sbCodeTokens.append( "( ");//$NON-NLS-1$
 		node.getValue().accept(this);
-		this.sbCodeTokens.append(")");//$NON-NLS-1$
+		this.sbCodeTokens.append( ")");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1478,10 +1481,10 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 					}
 					visitAnnotationsList(annotations);
 				}
-				this.sbCodeTokens.append("...");//$NON-NLS-1$
+				this.sbCodeTokens.append( "...");//$NON-NLS-1$
 			}
 		}
-		this.sbCodeTokens.append(" ");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ");//$NON-NLS-1$
 		node.getName().accept(this);
 		int size = node.getExtraDimensions();
 		if (node.getAST().apiLevel() >= AST.JLS8) {
@@ -1491,11 +1494,11 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 			}
 		} else {
 			for (int i = 0; i < size; i++) {
-				this.sbCodeTokens.append("[]"); //$NON-NLS-1$
+				this.sbCodeTokens.append( "[]"); //$NON-NLS-1$
 			}
 		}
 		if (node.getInitializer() != null) {
-			this.sbCodeTokens.append("=");//$NON-NLS-1$
+			this.sbCodeTokens.append( "=");//$NON-NLS-1$
 			node.getInitializer().accept(this);
 		}
 		return false;
@@ -1505,7 +1508,8 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 * @see ASTVisitor#visit(StringLiteral)
 	 */
 	public boolean visit(StringLiteral node) {
-		this.sbCodeTokens.append(node.getEscapedValue());
+		String underScoreStr=node.getEscapedValue().replaceAll( "\\s+", "_");
+		this.sbCodeTokens.append( " "+underScoreStr);
 		return false;
 	}
 
@@ -1516,30 +1520,30 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 		printIndent();
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
-			this.sbCodeTokens.append(".");//$NON-NLS-1$
+			this.sbCodeTokens.append( " . ");//$NON-NLS-1$
 		}
 		if (node.getAST().apiLevel() >= JLS3) {
 			if (!node.typeArguments().isEmpty()) {
-				this.sbCodeTokens.append("<");//$NON-NLS-1$
+				this.sbCodeTokens.append( "<");//$NON-NLS-1$
 				for (Iterator it = node.typeArguments().iterator(); it.hasNext(); ) {
 					Type t = (Type) it.next();
 					t.accept(this);
 					if (it.hasNext()) {
-						this.sbCodeTokens.append(",");//$NON-NLS-1$
+						this.sbCodeTokens.append( ",");//$NON-NLS-1$
 					}
 				}
-				this.sbCodeTokens.append(">");//$NON-NLS-1$
+				this.sbCodeTokens.append( ">");//$NON-NLS-1$
 			}
 		}
-		this.sbCodeTokens.append("super(");//$NON-NLS-1$
+		this.sbCodeTokens.append( "super( ");//$NON-NLS-1$
 		for (Iterator it = node.arguments().iterator(); it.hasNext(); ) {
 			Expression e = (Expression) it.next();
 			e.accept(this);
 			if (it.hasNext()) {
-				this.sbCodeTokens.append(",");//$NON-NLS-1$
+				this.sbCodeTokens.append( ",");//$NON-NLS-1$
 			}
 		}
-		this.sbCodeTokens.append(");\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( ") ;\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1549,9 +1553,9 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	public boolean visit(SuperFieldAccess node) {
 		if (node.getQualifier() != null) {
 			node.getQualifier().accept(this);
-			this.sbCodeTokens.append(".");//$NON-NLS-1$
+			this.sbCodeTokens.append( " . ");//$NON-NLS-1$
 		}
-		this.sbCodeTokens.append("super.");//$NON-NLS-1$
+		this.sbCodeTokens.append( "super.");//$NON-NLS-1$
 		node.getName().accept(this);
 		return false;
 	}
@@ -1562,32 +1566,32 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	public boolean visit(SuperMethodInvocation node) {
 		if (node.getQualifier() != null) {
 			node.getQualifier().accept(this);
-			this.sbCodeTokens.append(".");//$NON-NLS-1$
+			this.sbCodeTokens.append( " . ");//$NON-NLS-1$
 		}
-		this.sbCodeTokens.append("super.");//$NON-NLS-1$
+		this.sbCodeTokens.append( "super.");//$NON-NLS-1$
 		if (node.getAST().apiLevel() >= JLS3) {
 			if (!node.typeArguments().isEmpty()) {
-				this.sbCodeTokens.append("<");//$NON-NLS-1$
+				this.sbCodeTokens.append( "<");//$NON-NLS-1$
 				for (Iterator it = node.typeArguments().iterator(); it.hasNext(); ) {
 					Type t = (Type) it.next();
 					t.accept(this);
 					if (it.hasNext()) {
-						this.sbCodeTokens.append(",");//$NON-NLS-1$
+						this.sbCodeTokens.append( ",");//$NON-NLS-1$
 					}
 				}
-				this.sbCodeTokens.append(">");//$NON-NLS-1$
+				this.sbCodeTokens.append( ">");//$NON-NLS-1$
 			}
 		}
 		node.getName().accept(this);
-		this.sbCodeTokens.append("(");//$NON-NLS-1$
+		this.sbCodeTokens.append( "( ");//$NON-NLS-1$
 		for (Iterator it = node.arguments().iterator(); it.hasNext(); ) {
 			Expression e = (Expression) it.next();
 			e.accept(this);
 			if (it.hasNext()) {
-				this.sbCodeTokens.append(",");//$NON-NLS-1$
+				this.sbCodeTokens.append( ",");//$NON-NLS-1$
 			}
 		}
-		this.sbCodeTokens.append(")");//$NON-NLS-1$
+		this.sbCodeTokens.append( ")");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1601,7 +1605,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 			node.getQualifier().accept(this);
 			this.sbCodeTokens.append('.');
 		}
-		this.sbCodeTokens.append("super");//$NON-NLS-1$
+		this.sbCodeTokens.append( "super");//$NON-NLS-1$
 		visitReferenceTypeArguments(node.typeArguments());
 		node.getName().accept(this);
 		return false;
@@ -1612,11 +1616,11 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(SwitchCase node) {
 		if (node.isDefault()) {
-			this.sbCodeTokens.append("default :\n");//$NON-NLS-1$
+			this.sbCodeTokens.append( "default :\n");//$NON-NLS-1$
 		} else {
-			this.sbCodeTokens.append("case ");//$NON-NLS-1$
+			this.sbCodeTokens.append( "case ");//$NON-NLS-1$
 			node.getExpression().accept(this);
-			this.sbCodeTokens.append(":\n");//$NON-NLS-1$
+			this.sbCodeTokens.append( ":\n");//$NON-NLS-1$
 		}
 		this.indent++; //decremented in visit(SwitchStatement)
 		return false;
@@ -1626,10 +1630,10 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 * @see ASTVisitor#visit(SwitchStatement)
 	 */
 	public boolean visit(SwitchStatement node) {
-		this.sbCodeTokens.append("switch (");//$NON-NLS-1$
+		this.sbCodeTokens.append( "switch ( ");//$NON-NLS-1$
 		node.getExpression().accept(this);
-		this.sbCodeTokens.append(") ");//$NON-NLS-1$
-		this.sbCodeTokens.append("{\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( ") ");//$NON-NLS-1$
+		this.sbCodeTokens.append( "{\n");//$NON-NLS-1$
 		this.indent++;
 		for (Iterator it = node.statements().iterator(); it.hasNext(); ) {
 			Statement s = (Statement) it.next();
@@ -1638,7 +1642,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 		}
 		this.indent--;
 		printIndent();
-		this.sbCodeTokens.append("}\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( "}\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1646,9 +1650,9 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 * @see ASTVisitor#visit(SynchronizedStatement)
 	 */
 	public boolean visit(SynchronizedStatement node) {
-		this.sbCodeTokens.append("synchronized (");//$NON-NLS-1$
+		this.sbCodeTokens.append( "synchronized ( ");//$NON-NLS-1$
 		node.getExpression().accept(this);
-		this.sbCodeTokens.append(") ");//$NON-NLS-1$
+		this.sbCodeTokens.append( ") ");//$NON-NLS-1$
 		node.getBody().accept(this);
 		return false;
 	}
@@ -1660,10 +1664,10 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	public boolean visit(TagElement node) {
 		if (node.isNested()) {
 			// nested tags are always enclosed in braces
-			this.sbCodeTokens.append("{");//$NON-NLS-1$
+			this.sbCodeTokens.append( "{");//$NON-NLS-1$
 		} else {
 			// top-level tags always begin on a new line
-			this.sbCodeTokens.append("\n * ");//$NON-NLS-1$
+			this.sbCodeTokens.append( "\n * ");//$NON-NLS-1$
 		}
 		boolean previousRequiresWhiteSpace = false;
 		if (node.getTagName() != null) {
@@ -1683,18 +1687,18 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 				}
 			}
 			if (previousRequiresNewLine && currentIncludesWhiteSpace) {
-				this.sbCodeTokens.append("\n * ");//$NON-NLS-1$
+				this.sbCodeTokens.append( "\n * ");//$NON-NLS-1$
 			}
 			previousRequiresNewLine = currentIncludesWhiteSpace;
 			// add space if required to separate
 			if (previousRequiresWhiteSpace && !currentIncludesWhiteSpace) {
-				this.sbCodeTokens.append(" "); //$NON-NLS-1$
+				this.sbCodeTokens.append( " "); //$NON-NLS-1$
 			}
 			e.accept(this);
 			previousRequiresWhiteSpace = !currentIncludesWhiteSpace && !(e instanceof TagElement);
 		}
 		if (node.isNested()) {
-			this.sbCodeTokens.append("}");//$NON-NLS-1$
+			this.sbCodeTokens.append( "}");//$NON-NLS-1$
 		}
 		return false;
 	}
@@ -1714,9 +1718,9 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	public boolean visit(ThisExpression node) {
 		if (node.getQualifier() != null) {
 			node.getQualifier().accept(this);
-			this.sbCodeTokens.append(".");//$NON-NLS-1$
+			this.sbCodeTokens.append( " . ");//$NON-NLS-1$
 		}
-		this.sbCodeTokens.append("this");//$NON-NLS-1$
+		this.sbCodeTokens.append( "this");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1725,9 +1729,9 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(ThrowStatement node) {
 		printIndent();
-		this.sbCodeTokens.append("throw ");//$NON-NLS-1$
+		this.sbCodeTokens.append( "throw ");//$NON-NLS-1$
 		node.getExpression().accept(this);
-		this.sbCodeTokens.append(";\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ;\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1736,29 +1740,29 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(TryStatement node) {
 		printIndent();
-		this.sbCodeTokens.append("try ");//$NON-NLS-1$
+		this.sbCodeTokens.append( "try ");//$NON-NLS-1$
 		if (node.getAST().apiLevel() >= JLS4) {
 			List resources = node.resources();
 			if (!resources.isEmpty()) {
-				this.sbCodeTokens.append('(');
+				this.sbCodeTokens.append( " ( ");
 				for (Iterator it = resources.iterator(); it.hasNext(); ) {
 					VariableDeclarationExpression variable = (VariableDeclarationExpression) it.next();
 					variable.accept(this);
 					if (it.hasNext()) {
-						this.sbCodeTokens.append(';');
+						this.sbCodeTokens.append( " ; ");
 					}
 				}
-				this.sbCodeTokens.append(')');
+				this.sbCodeTokens.append( " ) ");
 			}
 		}
 		node.getBody().accept(this);
-		this.sbCodeTokens.append(" ");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ");//$NON-NLS-1$
 		for (Iterator it = node.catchClauses().iterator(); it.hasNext(); ) {
 			CatchClause cc = (CatchClause) it.next();
 			cc.accept(this);
 		}
 		if (node.getFinally() != null) {
-			this.sbCodeTokens.append(" finally ");//$NON-NLS-1$
+			this.sbCodeTokens.append( " finally ");//$NON-NLS-1$
 			node.getFinally().accept(this);
 		}
 		return false;
@@ -1781,23 +1785,23 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 		node.getName().accept(this);
 		if (node.getAST().apiLevel() >= JLS3) {
 			if (!node.typeParameters().isEmpty()) {
-				this.sbCodeTokens.append("<");//$NON-NLS-1$
+				this.sbCodeTokens.append( "<");//$NON-NLS-1$
 				for (Iterator it = node.typeParameters().iterator(); it.hasNext(); ) {
 					TypeParameter t = (TypeParameter) it.next();
 					t.accept(this);
 					if (it.hasNext()) {
-						this.sbCodeTokens.append(",");//$NON-NLS-1$
+						this.sbCodeTokens.append( ",");//$NON-NLS-1$
 					}
 				}
-				this.sbCodeTokens.append(">");//$NON-NLS-1$
+				this.sbCodeTokens.append( ">");//$NON-NLS-1$
 			}
 		}
-		this.sbCodeTokens.append(" ");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ");//$NON-NLS-1$
 		if (node.getAST().apiLevel() == JLS2) {
 			if (getSuperclass(node) != null) {
-				this.sbCodeTokens.append("extends ");//$NON-NLS-1$
+				this.sbCodeTokens.append( "extends ");//$NON-NLS-1$
 				getSuperclass(node).accept(this);
-				this.sbCodeTokens.append(" ");//$NON-NLS-1$
+				this.sbCodeTokens.append( " ");//$NON-NLS-1$
 			}
 			if (!superInterfaces(node).isEmpty()) {
 				this.sbCodeTokens.append(node.isInterface() ? "extends " : "implements ");//$NON-NLS-2$//$NON-NLS-1$
@@ -1805,17 +1809,17 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 					Name n = (Name) it.next();
 					n.accept(this);
 					if (it.hasNext()) {
-						this.sbCodeTokens.append(", ");//$NON-NLS-1$
+						this.sbCodeTokens.append( ", ");//$NON-NLS-1$
 					}
 				}
-				this.sbCodeTokens.append(" ");//$NON-NLS-1$
+				this.sbCodeTokens.append( " ");//$NON-NLS-1$
 			}
 		}
 		if (node.getAST().apiLevel() >= JLS3) {
 			if (node.getSuperclassType() != null) {
-				this.sbCodeTokens.append("extends ");//$NON-NLS-1$
+				this.sbCodeTokens.append( "extends ");//$NON-NLS-1$
 				node.getSuperclassType().accept(this);
-				this.sbCodeTokens.append(" ");//$NON-NLS-1$
+				this.sbCodeTokens.append( " ");//$NON-NLS-1$
 			}
 			if (!node.superInterfaceTypes().isEmpty()) {
 				this.sbCodeTokens.append(node.isInterface() ? "extends " : "implements ");//$NON-NLS-2$//$NON-NLS-1$
@@ -1823,13 +1827,13 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 					Type t = (Type) it.next();
 					t.accept(this);
 					if (it.hasNext()) {
-						this.sbCodeTokens.append(", ");//$NON-NLS-1$
+						this.sbCodeTokens.append( ", ");//$NON-NLS-1$
 					}
 				}
-				this.sbCodeTokens.append(" ");//$NON-NLS-1$
+				this.sbCodeTokens.append( " ");//$NON-NLS-1$
 			}
 		}
-		this.sbCodeTokens.append("{\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( "{\n");//$NON-NLS-1$
 		this.indent++;
 		for (Iterator it = node.bodyDeclarations().iterator(); it.hasNext(); ) {
 			BodyDeclaration d = (BodyDeclaration) it.next();
@@ -1837,7 +1841,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 		}
 		this.indent--;
 		printIndent();
-		this.sbCodeTokens.append("}\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( "}\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1859,7 +1863,7 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(TypeLiteral node) {
 		node.getType().accept(this);
-		this.sbCodeTokens.append(".class");//$NON-NLS-1$
+		this.sbCodeTokens.append( ".class");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1885,12 +1889,12 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 		}
 		node.getName().accept(this);
 		if (!node.typeBounds().isEmpty()) {
-			this.sbCodeTokens.append(" extends ");//$NON-NLS-1$
+			this.sbCodeTokens.append( " extends ");//$NON-NLS-1$
 			for (Iterator it = node.typeBounds().iterator(); it.hasNext(); ) {
 				Type t = (Type) it.next();
 				t.accept(this);
 				if (it.hasNext()) {
-					this.sbCodeTokens.append(" & ");//$NON-NLS-1$
+					this.sbCodeTokens.append( " & ");//$NON-NLS-1$
 				}
 			}
 		}
@@ -1923,12 +1927,12 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 			printModifiers(node.modifiers());
 		}
 		node.getType().accept(this);
-		this.sbCodeTokens.append(" ");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ");//$NON-NLS-1$
 		for (Iterator it = node.fragments().iterator(); it.hasNext(); ) {
 			VariableDeclarationFragment f = (VariableDeclarationFragment) it.next();
 			f.accept(this);
 			if (it.hasNext()) {
-				this.sbCodeTokens.append(", ");//$NON-NLS-1$
+				this.sbCodeTokens.append( ", ");//$NON-NLS-1$
 			}
 		}
 		return false;
@@ -1947,11 +1951,11 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 			}
 		} else {
 			for (int i = 0; i < size; i++) {
-				this.sbCodeTokens.append("[]");//$NON-NLS-1$
+				this.sbCodeTokens.append( "[]");//$NON-NLS-1$
 			}
 		}
 		if (node.getInitializer() != null) {
-			this.sbCodeTokens.append("=");//$NON-NLS-1$
+			this.sbCodeTokens.append( " = ");//$NON-NLS-1$
 			node.getInitializer().accept(this);
 		}
 		return false;
@@ -1969,15 +1973,15 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 			printModifiers(node.modifiers());
 		}
 		node.getType().accept(this);
-		this.sbCodeTokens.append(" ");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ");//$NON-NLS-1$
 		for (Iterator it = node.fragments().iterator(); it.hasNext(); ) {
 			VariableDeclarationFragment f = (VariableDeclarationFragment) it.next();
 			f.accept(this);
 			if (it.hasNext()) {
-				this.sbCodeTokens.append(", ");//$NON-NLS-1$
+				this.sbCodeTokens.append( ", ");//$NON-NLS-1$
 			}
 		}
-		this.sbCodeTokens.append(";\n");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ;\n");//$NON-NLS-1$
 		return false;
 	}
 
@@ -1986,9 +1990,9 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(WhileStatement node) {
 		printIndent();
-		this.sbCodeTokens.append("while (");//$NON-NLS-1$
+		this.sbCodeTokens.append( "while ( ");//$NON-NLS-1$
 		node.getExpression().accept(this);
-		this.sbCodeTokens.append(") ");//$NON-NLS-1$
+		this.sbCodeTokens.append( " ) ");//$NON-NLS-1$
 		node.getBody().accept(this);
 		return false;
 	}
@@ -1999,13 +2003,13 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	 */
 	public boolean visit(WildcardType node) {
 		visitTypeAnnotations(node);
-		this.sbCodeTokens.append("?");//$NON-NLS-1$
+		this.sbCodeTokens.append( "?");//$NON-NLS-1$
 		Type bound = node.getBound();
 		if (bound != null) {
 			if (node.isUpperBound()) {
-				this.sbCodeTokens.append(" extends ");//$NON-NLS-1$
+				this.sbCodeTokens.append( " extends ");//$NON-NLS-1$
 			} else {
-				this.sbCodeTokens.append(" super ");//$NON-NLS-1$
+				this.sbCodeTokens.append( " super ");//$NON-NLS-1$
 			}
 			bound.accept(this);
 		}
