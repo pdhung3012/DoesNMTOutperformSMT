@@ -1128,16 +1128,16 @@ public class ExtractAbbreviationVisitor extends ASTVisitor {
 	public boolean visit(LambdaExpression node) {
 		boolean hasParentheses = node.hasParentheses();
 		if (hasParentheses)
-			this.sbCodeTokens.append('(');
+			this.sbCodeTokens.append(" ( ");
 		for (Iterator it = node.parameters().iterator(); it.hasNext(); ) {
 			VariableDeclaration v = (VariableDeclaration) it.next();
 			v.accept(this);
 			if (it.hasNext()) {
-				this.sbCodeTokens.append( ",");//$NON-NLS-1$
+				this.sbCodeTokens.append( " , ");//$NON-NLS-1$
 			}
 		}
 		if (hasParentheses)
-			this.sbCodeTokens.append(')');
+			this.sbCodeTokens.append(" ) ");
 		this.sbCodeTokens.append( " -> "); //$NON-NLS-1$
 		node.getBody().accept(this);
 		return false;
