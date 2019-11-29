@@ -38,7 +38,7 @@ public class RunOnLargeScaleData {
 				String itemOutputPath = outputProjectPath + File.separator
 						+ arrFilesInput[i].getName() + File.separator;
 				ExtractSequenceForProjectRunnable thread = new ExtractSequenceForProjectRunnable(itemInputPath,
-						itemOutputPath, arrLibraryPrefix,i,fpOutputLog,lemm);
+						itemOutputPath, i,fpOutputLog);
 //				thread.run();
 				executor.execute(thread);
 			}
