@@ -190,68 +190,63 @@ public class ExtractLevelOfAbstractionFromPLCorpus {
 		String fpFullTextTest = fopInput + "test.t";
 		
 		int levelOfWord=5;
-//		String fpFullTextVocab = fopInput + "vocab.bpe.32000.en";
 
-//		String[] arrTrainText=FileIO.readFromLargeFile(fpFullTextTrain).split("\n");
-//		String[] arrValidText=FileIO.readFromLargeFile(fpFullTextValid).split("\n");
-//		String[] arrTestText=FileIO.readFromLargeFile(fpFullTextTest).split("\n");
-
-		new File(PathConstanct.PATH__LEVEL_PL_DATA).mkdir();
-		new File(fopOutput).mkdir();
-		int maxLine=1000000;
-
-		HashSet<String> setVocabSource = new LinkedHashSet<String>();
-		HashSet<String> setVocabTarget = new LinkedHashSet<String>();
-
-		generateAbbrevationCorpusByAbstractLevel(fpFullTextTrain, fopOutput + "train.s", fopOutput + "train.t",maxLine,levelOfWord, setVocabSource,
-				setVocabTarget);
-		generateAbbrevationCorpusByAbstractLevel(fpFullTextValid, fopOutput + "tune.s", fopOutput + "tune.t",maxLine,levelOfWord, setVocabSource,
-				setVocabTarget);
-		generateAbbrevationCorpusByAbstractLevel(fpFullTextTest, fopOutput + "test.s", fopOutput + "test.t",maxLine,levelOfWord, setVocabSource,
-				setVocabTarget);
-		System.out.println("finish corpus");
-
-		generateTotalAlignment(fopOutput, fopOutput + "train.s", fopOutput + "train.t", fopOutput + "training.s-t.A3",
-				fopOutput + "training.t-s.A3", false);
-		System.out.println("finish align");
-
-		StringBuilder sbVocabSource = new StringBuilder();
-		sbVocabSource.append("<unk>\n<s>\n</s>\n");
-		for (String str : setVocabSource) {
-			sbVocabSource.append(str + "\n");
-		}
-		FileIO.writeStringToFile(sbVocabSource.toString(), fopOutput + "vocab.s");
-
-		StringBuilder sbVocabTarget = new StringBuilder();
-		sbVocabTarget.append("<unk>\n<s>\n</s>\n");
-		for (String str : setVocabTarget) {
-			sbVocabTarget.append(str + "\n");
-		}
-		FileIO.writeStringToFile(sbVocabTarget.toString(), fopOutput + "vocab.t");
-
-		System.out.println("finish vocab in SMT");
-//		create data folder for SMT
-		new File(fopDataSMTOutput).mkdir();
-		new File(fopDataSMTOutput+"align"+File.separator).mkdir();
-		new File(fopDataSMTOutput+"train"+File.separator).mkdir();
-		new File(fopDataSMTOutput+"tune"+File.separator).mkdir();
-		new File(fopDataSMTOutput+"test"+File.separator).mkdir();
-		new File(fopDataSMTOutput+"refs"+File.separator).mkdir();
-		new File(fopDataSMTOutput+"refs"+File.separator+"tune"+File.separator).mkdir();
-		new File(fopDataSMTOutput+"refs"+File.separator+"test"+File.separator).mkdir();
-		
-		FileIO.copyFileReplaceExist(fopOutput+"training.s-t.A3", fopDataSMTOutput+"align"+File.separator+"training.s-t.A3");
-		FileIO.copyFileReplaceExist(fopOutput+"training.t-s.A3", fopDataSMTOutput+"align"+File.separator+"training.t-s.A3");
-		FileIO.copyFileReplaceExist(fopOutput+"train.s", fopDataSMTOutput+"train"+File.separator+"train.s");
-		FileIO.copyFileReplaceExist(fopOutput+"train.t", fopDataSMTOutput+"train"+File.separator+"train.t");
-		FileIO.copyFileReplaceExist(fopOutput+"tune.s", fopDataSMTOutput+"tune"+File.separator+"tune.s");
-		FileIO.copyFileReplaceExist(fopOutput+"tune.t", fopDataSMTOutput+"refs"+File.separator+"tune"+File.separator+"ref0");
-		FileIO.copyFileReplaceExist(fopOutput+"test.s", fopDataSMTOutput+"test"+File.separator+"test.s");
-		FileIO.copyFileReplaceExist(fopOutput+"test.t", fopDataSMTOutput+"refs"+File.separator+"test"+File.separator+"ref0");
-		
-		
-		generateNMTVocabulary(fopInput,fopNMTOutput);
-		generateNMTData(fopInput, fopNMTOutput);
+//		new File(PathConstanct.PATH__LEVEL_PL_DATA).mkdir();
+//		new File(fopOutput).mkdir();
+//		int maxLine=1000000;
+//
+//		HashSet<String> setVocabSource = new LinkedHashSet<String>();
+//		HashSet<String> setVocabTarget = new LinkedHashSet<String>();
+//
+//		generateAbbrevationCorpusByAbstractLevel(fpFullTextTrain, fopOutput + "train.s", fopOutput + "train.t",maxLine,levelOfWord, setVocabSource,
+//				setVocabTarget);
+//		generateAbbrevationCorpusByAbstractLevel(fpFullTextValid, fopOutput + "tune.s", fopOutput + "tune.t",maxLine,levelOfWord, setVocabSource,
+//				setVocabTarget);
+//		generateAbbrevationCorpusByAbstractLevel(fpFullTextTest, fopOutput + "test.s", fopOutput + "test.t",maxLine,levelOfWord, setVocabSource,
+//				setVocabTarget);
+//		System.out.println("finish corpus");
+//
+//		generateTotalAlignment(fopOutput, fopOutput + "train.s", fopOutput + "train.t", fopOutput + "training.s-t.A3",
+//				fopOutput + "training.t-s.A3", false);
+//		System.out.println("finish align");
+//
+//		StringBuilder sbVocabSource = new StringBuilder();
+//		sbVocabSource.append("<unk>\n<s>\n</s>\n");
+//		for (String str : setVocabSource) {
+//			sbVocabSource.append(str + "\n");
+//		}
+//		FileIO.writeStringToFile(sbVocabSource.toString(), fopOutput + "vocab.s");
+//
+//		StringBuilder sbVocabTarget = new StringBuilder();
+//		sbVocabTarget.append("<unk>\n<s>\n</s>\n");
+//		for (String str : setVocabTarget) {
+//			sbVocabTarget.append(str + "\n");
+//		}
+//		FileIO.writeStringToFile(sbVocabTarget.toString(), fopOutput + "vocab.t");
+//
+//		System.out.println("finish vocab in SMT");
+////		create data folder for SMT
+//		new File(fopDataSMTOutput).mkdir();
+//		new File(fopDataSMTOutput+"align"+File.separator).mkdir();
+//		new File(fopDataSMTOutput+"train"+File.separator).mkdir();
+//		new File(fopDataSMTOutput+"tune"+File.separator).mkdir();
+//		new File(fopDataSMTOutput+"test"+File.separator).mkdir();
+//		new File(fopDataSMTOutput+"refs"+File.separator).mkdir();
+//		new File(fopDataSMTOutput+"refs"+File.separator+"tune"+File.separator).mkdir();
+//		new File(fopDataSMTOutput+"refs"+File.separator+"test"+File.separator).mkdir();
+//		
+//		FileIO.copyFileReplaceExist(fopOutput+"training.s-t.A3", fopDataSMTOutput+"align"+File.separator+"training.s-t.A3");
+//		FileIO.copyFileReplaceExist(fopOutput+"training.t-s.A3", fopDataSMTOutput+"align"+File.separator+"training.t-s.A3");
+//		FileIO.copyFileReplaceExist(fopOutput+"train.s", fopDataSMTOutput+"train"+File.separator+"train.s");
+//		FileIO.copyFileReplaceExist(fopOutput+"train.t", fopDataSMTOutput+"train"+File.separator+"train.t");
+//		FileIO.copyFileReplaceExist(fopOutput+"tune.s", fopDataSMTOutput+"tune"+File.separator+"tune.s");
+//		FileIO.copyFileReplaceExist(fopOutput+"tune.t", fopDataSMTOutput+"refs"+File.separator+"tune"+File.separator+"ref0");
+//		FileIO.copyFileReplaceExist(fopOutput+"test.s", fopDataSMTOutput+"test"+File.separator+"test.s");
+//		FileIO.copyFileReplaceExist(fopOutput+"test.t", fopDataSMTOutput+"refs"+File.separator+"test"+File.separator+"ref0");
+//		
+//		
+//		generateNMTVocabulary(fopInput,fopNMTOutput);
+//		generateNMTData(fopInput, fopNMTOutput);
 		generateNMTsplitLine(fopNMTOutput,fopNMTSplitOutput,50);
 		
 
