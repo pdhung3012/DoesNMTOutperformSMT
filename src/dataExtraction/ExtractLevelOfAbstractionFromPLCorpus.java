@@ -30,7 +30,7 @@ public class ExtractLevelOfAbstractionFromPLCorpus {
 		return line;
 	}
 
-	public static void generateAbbrevationCorpus(String fpSource, String fpOutputSource, String fpOutputTarget,int maxLine,
+	public static void generateAbbrevationCorpusByAbstractLevel(String fpSource, String fpOutputSource, String fpOutputTarget,int maxLine,int level,
 			HashSet<String> setVocabSource, HashSet<String> setVocabTarget) {
 		StringBuilder sbResultSource = new StringBuilder();
 		StringBuilder sbResultTarget = new StringBuilder();
@@ -56,7 +56,7 @@ public class ExtractLevelOfAbstractionFromPLCorpus {
 				for (int j = 0; j < arrSource.length; j++) {
 					String fullToken = arrSource[j].trim();
 					if (!fullToken.isEmpty()) {
-						String abbrevToken = arrSource[j].substring(0, 1);
+						String abbrevToken = fullToken.length()>=level?fullToken.substring(0, level):fullToken;
 						sbItemSource.append(abbrevToken + " ");
 						sbItemTarget.append(fullToken + " ");
 						setVocabSource.add(abbrevToken);
@@ -176,30 +176,33 @@ public class ExtractLevelOfAbstractionFromPLCorpus {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		String fopInput = PathConstanct.PATH_PL_DATA;
-		String fopOutput = PathConstanct.PATH_PL_DATA + "SMT" + File.separator;
-		String fopDataSMTOutput = PathConstanct.PATH_PL_DATA + "SMT" + File.separator+ "data" + File.separator;
-		String fopNMTOutput = PathConstanct.PATH_PL_DATA + "NMT" + File.separator;
+		String fopOutput = PathConstanct.PATH__LEVEL_PL_DATA + "SMT" + File.separator;
+		String fopDataSMTOutput = PathConstanct.PATH__LEVEL_PL_DATA + "SMT" + File.separator+ "data" + File.separator;
+		String fopNMTOutput = PathConstanct.PATH__LEVEL_PL_DATA + "NMT" + File.separator;
 		
 		String fpFullTextTrain = fopInput + "train.t";
 		String fpFullTextValid = fopInput + "tune.t";
 		String fpFullTextTest = fopInput + "test.t";
+		
+		int levelOfWord=5;
 //		String fpFullTextVocab = fopInput + "vocab.bpe.32000.en";
 
 //		String[] arrTrainText=FileIO.readFromLargeFile(fpFullTextTrain).split("\n");
 //		String[] arrValidText=FileIO.readFromLargeFile(fpFullTextValid).split("\n");
 //		String[] arrTestText=FileIO.readFromLargeFile(fpFullTextTest).split("\n");
 
+		new File(PathConstanct.PATH__LEVEL_PL_DATA).mkdir();
 		new File(fopOutput).mkdir();
 		int maxLine=1000000;
 
 		HashSet<String> setVocabSource = new LinkedHashSet<String>();
 		HashSet<String> setVocabTarget = new LinkedHashSet<String>();
 
-		generateAbbrevationCorpus(fpFullTextTrain, fopOutput + "train.s", fopOutput + "train.t",maxLine, setVocabSource,
+		generateAbbrevationCorpusByAbstractLevel(fpFullTextTrain, fopOutput + "train.s", fopOutput + "train.t",maxLine,levelOfWord, setVocabSource,
 				setVocabTarget);
-		generateAbbrevationCorpus(fpFullTextValid, fopOutput + "tune.s", fopOutput + "tune.t",maxLine, setVocabSource,
+		generateAbbrevationCorpusByAbstractLevel(fpFullTextValid, fopOutput + "tune.s", fopOutput + "tune.t",maxLine,levelOfWord, setVocabSource,
 				setVocabTarget);
-		generateAbbrevationCorpus(fpFullTextTest, fopOutput + "test.s", fopOutput + "test.t",maxLine, setVocabSource,
+		generateAbbrevationCorpusByAbstractLevel(fpFullTextTest, fopOutput + "test.s", fopOutput + "test.t",maxLine,levelOfWord, setVocabSource,
 				setVocabTarget);
 		System.out.println("finish corpus");
 
