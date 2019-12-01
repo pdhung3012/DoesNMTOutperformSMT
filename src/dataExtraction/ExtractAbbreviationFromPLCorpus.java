@@ -178,6 +178,7 @@ public class ExtractAbbreviationFromPLCorpus {
 		// TODO Auto-generated method stub
 		String fopInput = PathConstanct.PATH_PL_DATA;
 		String fopOutput = PathConstanct.PATH_PL_DATA + "SMT" + File.separator;
+		String fopDataSMTOutput = PathConstanct.PATH_PL_DATA + "SMT" + File.separator+ "data" + File.separator;
 		String fopNMTOutput = PathConstanct.PATH_PL_DATA + "NMT" + File.separator;
 		
 		String fpFullTextTrain = fopInput + "train.t";
@@ -222,9 +223,28 @@ public class ExtractAbbreviationFromPLCorpus {
 		FileIO.writeStringToFile(sbVocabTarget.toString(), fopOutput + "vocab.t");
 
 		System.out.println("finish vocab in SMT");
+//		create data folder for SMT
+		new File(fopDataSMTOutput).mkdir();
+		new File(fopDataSMTOutput+"align"+File.separator).mkdir();
+		new File(fopDataSMTOutput+"train"+File.separator).mkdir();
+		new File(fopDataSMTOutput+"tune"+File.separator).mkdir();
+		new File(fopDataSMTOutput+"test"+File.separator).mkdir();
+		new File(fopDataSMTOutput+"refs"+File.separator).mkdir();
+		new File(fopDataSMTOutput+"refs"+File.separator+"tune"+File.separator).mkdir();
+		new File(fopDataSMTOutput+"refs"+File.separator+"test"+File.separator).mkdir();
+		
+		FileIO.copyFileReplaceExist(fopOutput+"training.s-t.A3", fopDataSMTOutput+"align"+File.separator+"training.s-t.A3");
+		FileIO.copyFileReplaceExist(fopOutput+"training.t-s.A3", fopDataSMTOutput+"align"+File.separator+"training.t-s.A3");
+		FileIO.copyFileReplaceExist(fopOutput+"train.s", fopDataSMTOutput+"train"+File.separator+"train.s");
+		FileIO.copyFileReplaceExist(fopOutput+"train.t", fopDataSMTOutput+"train"+File.separator+"train.t");
+		FileIO.copyFileReplaceExist(fopOutput+"tune.s", fopDataSMTOutput+"tune"+File.separator+"tune.s");
+		FileIO.copyFileReplaceExist(fopOutput+"tune.t", fopDataSMTOutput+"refs"+File.separator+"tune"+File.separator+"ref0");
+		FileIO.copyFileReplaceExist(fopOutput+"test.s", fopDataSMTOutput+"test"+File.separator+"test.s");
+		FileIO.copyFileReplaceExist(fopOutput+"test.t", fopDataSMTOutput+"refs"+File.separator+"test"+File.separator+"ref0");
+		
 		
 		generateNMTVocabulary(fopInput,fopNMTOutput);
-		generateNMTData(fopInput, fopOutput);
+		generateNMTData(fopInput, fopNMTOutput);
 		
 		
 
