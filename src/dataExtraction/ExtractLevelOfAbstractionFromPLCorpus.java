@@ -182,7 +182,7 @@ public class ExtractLevelOfAbstractionFromPLCorpus {
 		String fopOutput = PathConstanct.PATH__LEVEL_PL_DATA + "SMT" + File.separator;
 		String fopDataSMTOutput = PathConstanct.PATH__LEVEL_PL_DATA + "SMT" + File.separator+ "data" + File.separator;
 		String fopNMTOutput = PathConstanct.PATH__LEVEL_PL_DATA + "NMT" + File.separator;
-		String fopNMTSplitOutput = PathConstanct.PATH_PL_DATA + "NMTSplit" + File.separator;
+		String fopNMTSplitOutput = PathConstanct.PATH__LEVEL_PL_DATA + "NMTSplit" + File.separator;
 		
 		
 		String fpFullTextTrain = fopInput + "train.t";
