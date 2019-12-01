@@ -178,5 +178,20 @@ public class FileIO {
 		}
 		return arrResult;
 	}
+	
+//	public static void copyFileReplaceExisting(String fpSource,String fpTarget)  {
+//
+//        
+//
+//        //copy source to target using Files Class
+//        try {
+//        	Path sourceDirectory = Paths.get(fpSource);
+//            Path targetDirectory = Paths.get(fpTarget);
+//            Files.copy(sourceDirectory, targetDirectory,StandardCopyOption.REPLACE_EXISTING);
+//        } catch (IOException e) {
+//            System.out.println(e.toString());
+//        }
+//    }
+
 
 }
