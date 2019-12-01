@@ -8,5 +8,6 @@ public class PathConstanct {
 	public static String PATH_OUTPUT_ABBREV_PROJECT="G:\\seqAbbrev\\";
 	public static String PATH_OUTPUT_ABBREV_CODE="G:\\dataAbbrevReso\\seqAbbrevCombineCode\\";
 	public static String PATH_PROJECT_TRAIN_TEST_NAME="G:\\dataAbbrevReso\\seqTrainTestTuneOrigin\\";
+	public static String PATH_PL_DATA="G:\\dataAbbrevReso\\v1_code\\";
 
 }
