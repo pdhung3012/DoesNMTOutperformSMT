@@ -6,12 +6,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 import constanct.PathConstanct;
 import utils.FileIO;
 import utils.FileUtil;
+import utils.SortUtil;
 
 public class ExtractAbbreviationFromPLCorpus {
 
@@ -174,11 +176,13 @@ public class ExtractAbbreviationFromPLCorpus {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String fopInput = PathConstanct.fop_NL_Data;
-		String fopOutput = PathConstanct.fop_NL_Data + "conalaAbbrev" + File.separator;
-		String fpFullTextTrain = fopInput + "data_ps.descriptions.train";
-		String fpFullTextValid = fopInput + "data_ps.descriptions.valid";
-		String fpFullTextTest = fopInput + "data_ps.descriptions.test";
+		String fopInput = PathConstanct.PATH_PL_DATA;
+		String fopOutput = PathConstanct.PATH_PL_DATA + "SMT" + File.separator;
+		String fopNMTOutput = PathConstanct.PATH_PL_DATA + "NMT" + File.separator;
+		
+		String fpFullTextTrain = fopInput + "train.t";
+		String fpFullTextValid = fopInput + "tune.t";
+		String fpFullTextTest = fopInput + "test.t";
 //		String fpFullTextVocab = fopInput + "vocab.bpe.32000.en";
 
 //		String[] arrTrainText=FileIO.readFromLargeFile(fpFullTextTrain).split("\n");
@@ -217,8 +221,158 @@ public class ExtractAbbreviationFromPLCorpus {
 		}
 		FileIO.writeStringToFile(sbVocabTarget.toString(), fopOutput + "vocab.t");
 
-		System.out.println("finish vocab");
+		System.out.println("finish vocab in SMT");
+		
+		generateNMTVocabulary(fopInput,fopNMTOutput);
+		generateNMTData(fopInput, fopOutput);
+		
+		
 
+	}
+	
+	public static void collectWordsForVocabulary(String fpText,HashMap<String,Integer> mapVocabulary) {
+		String[] lstLines=FileIO.readFromLargeFile(fpText).split("\n");
+		for(int i=0;i<lstLines.length;i++) {
+			String strItem=lstLines[i].trim();
+			String[] arrTokens=strItem.split("\\s+");
+			for (int j=0;j<arrTokens.length;j++) {
+				String token=arrTokens[j];
+				if(!mapVocabulary.containsKey(token)) {
+					mapVocabulary.put(token, 1);
+				} else {
+					int number=mapVocabulary.get(token)+1;
+					mapVocabulary.put(token, number);
+				}				
+			}
+			
+		}
+	}
+
+	public static void generateNMTVocabulary(String fopInput,String fopOutput) {
+		// TODO Auto-generated method stub
+		
+//		String fopInput=PathConstanct.fop_NL_Data+"conalaAbbrev/v3/";
+		String fopTrainSource=fopInput+"train.s";
+		String fopTrainTarget=fopInput+"train.t";
+		String fopTuneSource=fopInput+"tune.s";
+		String fopTuneTarget=fopInput+"tune.t";
+		String fpMapVocabulary=fopOutput+"countVocab.txt";
+		
+		HashMap<String,Integer> mapVocabulary=new HashMap<String, Integer>();
+		
+		collectWordsForVocabulary(fopTrainSource, mapVocabulary);
+		collectWordsForVocabulary(fopTrainTarget, mapVocabulary);
+		collectWordsForVocabulary(fopTuneSource, mapVocabulary);
+		collectWordsForVocabulary(fopTuneTarget, mapVocabulary);
+		
+		mapVocabulary= SortUtil.sortHashMapStringIntByValueDesc(mapVocabulary);
+		
+		StringBuilder sbResult=new StringBuilder();
+		for(String key:mapVocabulary.keySet()) {
+			sbResult.append(key+"\t"+mapVocabulary.get(key)+"\n");
+		}
+		
+		FileIO.writeStringToFile(sbResult.toString()+"\n", fpMapVocabulary);
+		
+	}
+	
+	public static void removeSparseTokens(String fpInputSource,String fpOutputSource,String fpInputTarget,String fpOutputTarget,HashMap<String,Integer> mapVocabMoreTokens,HashSet<String> setVocabSource,HashSet<String> setVocabTarget){
+		StringBuilder sbResultSource=new StringBuilder();
+		StringBuilder sbResultTarget=new StringBuilder();
+		String[] lstInSource=FileIO.readFromLargeFile(fpInputSource).split("\n");
+		String[] lstInTarget=FileIO.readFromLargeFile(fpInputTarget).split("\n");
+		String tokenUnknown="Unknown";
+		
+		FileIO.writeStringToFile("",fpOutputSource);
+		FileIO.writeStringToFile("",fpOutputTarget);
+		System.out.println(lstInSource.length+" "+lstInTarget.length);
+		
+		setVocabSource.add(tokenUnknown);
+		setVocabTarget.add(tokenUnknown);
+		
+		for(int i=0;i<lstInSource.length;i++) {
+			String[] arrSource=lstInSource[i].trim().split("\\s+");
+			String[] arrTarget=lstInTarget[i].trim().split("\\s+");
+			StringBuilder sbItemSource=new StringBuilder();
+			StringBuilder sbItemTarget=new StringBuilder();
+			for(int j=0;j<arrSource.length;j++) {
+				if(mapVocabMoreTokens.containsKey(arrSource[j]) && mapVocabMoreTokens.containsKey(arrTarget[j]) ) {
+					sbItemSource.append(arrSource[j]+" ");
+					sbItemTarget.append(arrTarget[j]+" ");
+					if(!setVocabSource.contains(arrSource[j])) {
+						setVocabSource.add(arrSource[j]);
+					}
+					if(!setVocabTarget.contains(arrTarget[j])) {
+						setVocabTarget.add(arrTarget[j]);
+					}
+				} else {
+					sbItemSource.append(tokenUnknown+" ");
+					sbItemTarget.append(tokenUnknown+" ");
+				}
+			}
+			
+			sbResultSource.append(sbItemSource.toString()+"\n");
+			sbResultTarget.append(sbItemTarget.toString()+"\n");
+			
+			if((i+1)%100000 ==0 || i==lstInSource.length-1){
+				FileIO.appendStringToFile(sbResultSource.toString().trim()+"\n",fpOutputSource);
+				FileIO.appendStringToFile(sbResultTarget.toString().trim()+"\n",fpOutputTarget);
+				sbResultSource=new StringBuilder();
+				sbResultTarget=new StringBuilder();
+			}
+		}
+		
+		
+				
+	}
+
+	public static void generateNMTData(String fopInput,String fopOutput) {
+		// TODO Auto-generated method stub
+//		String fopInput=PathConstanct.fop_NL_Data+"conalaAbbrev/v3/";
+//		String fopOutput=PathConstanct.fop_NL_Data+"conalaAbbrev/v3/"+"v4"+File.separator;
+		String fpVocab=fopOutput+"countVocab.txt";
+		int numAppearInCorpus=10;
+		
+		new File(fopOutput).mkdir();
+		String[] arrVocabs=FileIO.readStringFromFile(fpVocab).split("\n");
+		HashMap<String,Integer> mapVocabs=new HashMap<String, Integer>();
+		for(int i=0;i<arrVocabs.length;i++) {
+			String[] itemVocab=arrVocabs[i].split("\t");
+			if(itemVocab.length>=2) {
+				int numItem=Integer.parseInt(itemVocab[1]);
+				if((!itemVocab[0].isEmpty()) && numItem>=numAppearInCorpus){
+					mapVocabs.put(itemVocab[0], numItem);
+					
+				}				
+			}
+		}
+		
+		HashSet<String> setVocabSource=new HashSet<String>();
+		HashSet<String> setVocabTarget=new HashSet<String>();
+		
+		
+		removeSparseTokens(fopInput+"train.s",fopOutput+"train.s",fopInput+"train.t",fopOutput+"train.t",mapVocabs,setVocabSource,setVocabTarget);
+		removeSparseTokens(fopInput+"tune.s",fopOutput+"tune.s",fopInput+"tune.t",fopOutput+"tune.t",mapVocabs,setVocabSource,setVocabTarget);
+		FileIO.copyFileReplaceExist(fopInput+"test.s", fopOutput+"test.s");
+		FileIO.copyFileReplaceExist(fopInput+"test.t", fopOutput+"test.t");
+		
+		StringBuilder sbVocabSource=new StringBuilder();
+		sbVocabSource.append("<unk>\n<s>\n</s>\n");
+		for(String str:setVocabSource) {
+			sbVocabSource.append(str+"\n");
+		}
+		FileIO.writeStringToFile(sbVocabSource.toString(), fopOutput+"vocab.s");
+
+		
+		StringBuilder sbVocabTarget=new StringBuilder();
+		sbVocabTarget.append("<unk>\n<s>\n</s>\n");
+		for(String str:setVocabTarget) {
+			sbVocabTarget.append(str+"\n");
+		}
+		FileIO.writeStringToFile(sbVocabTarget.toString(), fopOutput+"vocab.t");
+		
+		
+		
 	}
 
 }
