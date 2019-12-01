@@ -78,6 +78,7 @@ public class CreateTrainingData {
 		FileIO.writeStringToFile("", outputFolder+"target.txt");
 		FileIO.writeStringToFile("", outputFolder+"source.txt");
 		FileIO.writeStringToFile("", outputFolder+"locations.txt");
+		int countProject=0;
 		
 		for (int i = 0; i < arrIn.length; i++) {
 			if (arrIn[i].isDirectory()) {
@@ -102,6 +103,10 @@ public class CreateTrainingData {
 				FileIO.appendStringToFile(strLocation, outputFolder+"locations.txt");
 				System.out.println(i + " finish " + arrIn[i].getName()
 						+ " size " );
+				countProject++;
+				if(countProject==1000) {
+					break;
+				}
 			}
 		}
 	}
