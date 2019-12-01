@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -81,7 +82,7 @@ public class FileIO {
 	
 	public static void appendStringToFile(String string, String outputFile) {
 		try {
-			BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile,true));
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile,true), StandardCharsets.ISO_8859_1));
 			writer.write(string);
 			writer.flush();
 			writer.close();
