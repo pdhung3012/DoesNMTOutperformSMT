@@ -191,7 +191,7 @@ public class ExtractAbbreviationFromPLCorpus {
 
 		new File(fopOutput).mkdir();
 		int maxLine=1000000;
-/*
+
 		HashSet<String> setVocabSource = new LinkedHashSet<String>();
 		HashSet<String> setVocabTarget = new LinkedHashSet<String>();
 
@@ -244,7 +244,7 @@ public class ExtractAbbreviationFromPLCorpus {
 		
 		generateNMTVocabulary(fopInput,fopNMTOutput);
 		generateNMTData(fopInput, fopNMTOutput);
-		*/
+		
 		generateNMTsplitLine(fopNMTOutput,fopNMTSplitOutput,50);
 		
 		
