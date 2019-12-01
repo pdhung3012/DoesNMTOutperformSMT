@@ -91,24 +91,15 @@ public class CreateTrainingData {
 						+ File.separator + "hash" + File.separator
 						+ "mapIdenAndId.txt";
 				
-				File fileMapIdenAndId = new File(fpMapIdenAndId);
-				if (fileMapIdenAndId.isFile()) {
-					String fpMapReplaceId = arrIn[i].getAbsolutePath()
-							+ File.separator + "hash" + File.separator
-							+ "mapReplaceId.txt";
-//					HashMap<String,String> mapReplaceId=CombineSequenceFromProjects.getMapFromFileStringString(fpMapReplaceId);
-					
-					String strTarget=FileIO.readStringFromFile(fpTarget);
-//					String strNewTarget=replaceTargetWithTotalId(strTarget, mapReplaceId);
-					
-//					String strNewTarget=strTarget;
-					FileIO.appendStringToFile(strTarget, outputFolder+"target.txt");
-					String strSource=FileIO.readStringFromFile(fpSource);
-					FileIO.appendStringToFile(strSource, outputFolder+"source.txt");
-					String strLocation=FileIO.readStringFromFile(fpLocation);
-					FileIO.appendStringToFile(strLocation, outputFolder+"locations.txt");
-					
-				}
+				String strTarget=FileIO.readStringFromFile(fpTarget);
+//				String strNewTarget=replaceTargetWithTotalId(strTarget, mapReplaceId);
+				
+//				String strNewTarget=strTarget;
+				FileIO.appendStringToFile(strTarget, outputFolder+"target.txt");
+				String strSource=FileIO.readStringFromFile(fpSource);
+				FileIO.appendStringToFile(strSource, outputFolder+"source.txt");
+				String strLocation=FileIO.readStringFromFile(fpLocation);
+				FileIO.appendStringToFile(strLocation, outputFolder+"locations.txt");
 				System.out.println(i + " finish " + arrIn[i].getName()
 						+ " size " );
 			}
