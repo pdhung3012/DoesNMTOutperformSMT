@@ -193,6 +193,8 @@ public class ExtractLevelOfAbstractionFromPLCorpus {
 
 		new File(PathConstanct.PATH__LEVEL_PL_DATA).mkdir();
 		new File(fopOutput).mkdir();
+		new File(fopNMTOutput).mkdir();
+		new File(fopNMTSplitOutput).mkdir();
 		int maxLine=1000000;
 
 		HashSet<String> setVocabSource = new LinkedHashSet<String>();

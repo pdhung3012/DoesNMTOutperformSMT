@@ -9,6 +9,6 @@ public class PathConstanct {
 	public static String PATH_OUTPUT_ABBREV_CODE="G:\\dataAbbrevReso\\seqAbbrevCombineCode\\";
 	public static String PATH_PROJECT_TRAIN_TEST_NAME="G:\\dataAbbrevReso\\seqTrainTestTuneOrigin\\";
 	public static String PATH_PL_DATA="G:\\dataAbbrevReso\\v1_code\\";
-	public static String PATH__LEVEL_PL_DATA="G:\\dataAbbrevReso\\v2_code\\";
+	public static String PATH__LEVEL_PL_DATA="G:\\dataAbbrevReso\\v3_code\\";
 
 }
