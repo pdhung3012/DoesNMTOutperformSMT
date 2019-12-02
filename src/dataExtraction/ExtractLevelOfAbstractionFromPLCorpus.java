@@ -20,7 +20,8 @@ import utils.SortUtil;
 
 public class ExtractLevelOfAbstractionFromPLCorpus {
 	public static String normalizeForConalaCorpus(String input) {
-		return input.replaceAll("'", "").replaceAll("`", "").replaceAll(":", " ").replaceAll("\\\\", " ").replaceAll("\\(", " ").replaceAll("\\)", " ").replaceAll("<unk>", "unk").replaceAll("<s>", " ").replaceAll("</s>", " ").replaceAll("\\|\\|\\|port\\|", " port ").replaceAll("[^ _a-zA-Z0-9\\-]", "").trim();
+//		.replaceAll("[^ _a-zA-Z0-9\\-]", "")
+		return input.replaceAll("'", "").replaceAll("`", "").replaceAll(":", " ").replaceAll("\\\\", " ").replaceAll("\\(", " ").replaceAll("\\)", " ").replaceAll("<unk>", "unk").replaceAll("<s>", " ").replaceAll("</s>", " ").trim();
 	}
 	
 	public static String tryGetLine(BufferedReader br) {
@@ -189,7 +190,7 @@ public class ExtractLevelOfAbstractionFromPLCorpus {
 		String fpFullTextValid = fopInput + "tune.t";
 		String fpFullTextTest = fopInput + "test.t";
 		
-		int levelOfWord=9;
+		int levelOfWord=5;
 
 		new File(PathConstanct.PATH__LEVEL_PL_DATA).mkdir();
 		new File(fopOutput).mkdir();
@@ -248,7 +249,7 @@ public class ExtractLevelOfAbstractionFromPLCorpus {
 		
 		
 		generateNMTVocabulary(fopInput,fopNMTOutput);
-		generateNMTData(fopInput, fopNMTOutput);
+		generateNMTData(fopOutput, fopNMTOutput);
 		generateNMTsplitLine(fopNMTOutput,fopNMTSplitOutput,50);
 		
 
