@@ -21,7 +21,8 @@ import utils.SortUtil;
 public class ExtractLevelOfAbstractionFromPLCorpus {
 	public static String normalizeForConalaCorpus(String input) {
 //		.replaceAll("[^ _a-zA-Z0-9\\-]", "")
-		return input.replaceAll("'", "").replaceAll("`", "").replaceAll(":", " ").replaceAll("\\\\", " ").replaceAll("\\(", " ").replaceAll("\\)", " ").replaceAll("<unk>", "unk").replaceAll("<s>", " ").replaceAll("</s>", " ").trim();
+//		.replaceAll(":", " ").replaceAll("\\\\", " ").replaceAll("\\(", " ").replaceAll("\\)", " ")
+		return input.replaceAll("'", "").replaceAll("`", "").replaceAll("<unk>", "unk").replaceAll("<s>", " ").replaceAll("</s>", " ").trim();
 	}
 	
 	public static String tryGetLine(BufferedReader br) {
