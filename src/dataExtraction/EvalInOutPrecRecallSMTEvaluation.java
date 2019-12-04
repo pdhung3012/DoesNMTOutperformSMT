@@ -8,12 +8,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 
-import consts.PathConstanct;
 import utils.FileUtil;
 import utils.MapUtil;
 import utils.ReorderingTokens;
 
-public class EvalInOutPrecRecallExpressionInference {
+public class EvalInOutPrecRecallSMTEvaluation {
 
 	
 //	/sensitivity_5fold_ressult\\
@@ -83,9 +82,9 @@ public class EvalInOutPrecRecallExpressionInference {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String fop_input=PathConstanct.PATH_PROJECT_TTT_CUR_EVAL_DATA+File.separator;
-		String fop_output=PathConstanct.PATH_PROJECT_TTT_CUR_EVAL_DATA+File.separator+"eval"+File.separator;
-		String fop_mapTotalId=PathConstanct.PATH_PROJECT_TTT_CUR_EVAL_DATA+File.separator+"map"+File.separator;
+		String fop_input="";//PathConstanct.PATH_PROJECT_TTT_CUR_EVAL_DATA+File.separator;
+		String fop_output="";//PathConstanct.PATH_PROJECT_TTT_CUR_EVAL_DATA+File.separator+"eval"+File.separator;
+		String fop_mapTotalId="";//PathConstanct.PATH_PROJECT_TTT_CUR_EVAL_DATA+File.separator+"map"+File.separator;
 		new File(fop_output).mkdir();
 		
 		String fn_trainSource="train.s";
@@ -102,10 +101,10 @@ public class EvalInOutPrecRecallExpressionInference {
 		String fn_statisticIncorrectMapping="incorrect_mappxting.txt";
 //		String fn_vocabulary="vocabulary.txt";
 		
-		HashMap<String,String> mapTotalId=MapUtil.getHashMapFromFile(fop_mapTotalId+"a_mapTotalIdAndContent.txt");
-		HashMap<String,String> mapIdLibrary=getLibraryInfo(mapTotalId);
-		System.out.println(mapTotalId.size()+" Map total ID loaded!");
-		ReorderingTokens.reorderingTokens(fop_input+fn_testSource,fop_input+fn_testTarget, fop_input+fn_testTranslation, fop_input+fn_correctOrderTranslated, mapTotalId);
+//		HashMap<String,String> mapTotalId=MapUtil.getHashMapFromFile(fop_mapTotalId+"a_mapTotalIdAndContent.txt");
+//		HashMap<String,String> mapIdLibrary=getLibraryInfo(mapTotalId);
+//		System.out.println(mapTotalId.size()+" Map total ID loaded!");
+		ReorderingTokens.reorderingTokens(fop_input+fn_testSource,fop_input+fn_testTarget, fop_input+fn_testTranslation, fop_input+fn_correctOrderTranslated);
 		System.out.println("Finish reorder!");
 		
 		ArrayList<String> arrTrainSource=FileUtil.getFileStringArray(fop_input+fn_trainSource);
@@ -147,15 +146,15 @@ public class EvalInOutPrecRecallExpressionInference {
 		
 		
 		HashMap<String,HashMap<String,Integer>> mapCountPerLibrary=new HashMap<String, HashMap<String,Integer>>();
-		
-		for(String strItem:set5Libraries){
+		String keyMapCountPerLibrary="total-key";
+//		for(String strItem:set5Libraries){
 			HashMap<String,Integer> mapElement=new HashMap<String, Integer>();
 			mapElement.put("Correct", 0);
 			mapElement.put("Incorrect", 0);
 			mapElement.put("OOT", 0);
 			mapElement.put("OOS", 0);
-			mapCountPerLibrary.put(strItem, mapElement);
-		}
+			mapCountPerLibrary.put(keyMapCountPerLibrary, mapElement);
+//		}
 		
 		
 //		set5Libraries.add("org.apache.");
@@ -254,36 +253,6 @@ public class EvalInOutPrecRecallExpressionInference {
 			String[] itemTarget=arrTestTarget.get(i).trim().split("\\s+");
 			String[] itemTrans=arrTestTranslation.get(i).trim().split("\\s+");
 			String strIncorrectLog="",strOutSource="",strOutTarget="";
-			/*
-			//String[] itemCorrectOrderTrans=itemTrans;
-			int indexAbNormalSource=0,indexAbNormalTranslation=0;
-			String strCorrectSequence="";
-			for(int j=0;j<itemSource.length;j++){
-				indexAbNormalSource=j;
-				indexAbNormalTranslation=j;
-				String[] transTokenSplitByDot=itemTrans[j].split("\\.");
-				String lastWordOfTarget=transTokenSplitByDot[transTokenSplitByDot.length-1];
-				String[] arrInTokenS=itemSource[j].split("\\.");
-				String lastWordOfSource=arrInTokenS[arrInTokenS.length-1];
-				if(lastWordOfTarget.equals(lastWordOfSource)){
-					
-				} else{
-					for(int q=indexAbNormalTranslation;q<itemTrans.length;q++){
-						String[] q_transTokenSplitByDot=itemTrans[q].split("\\.");
-						String q_lastWordOfTranslated=q_transTokenSplitByDot[q_transTokenSplitByDot.length-1];
-						if(q_lastWordOfTranslated.equals(lastWordOfSource)){
-							//swap position
-							String temp=itemTrans[q];
-							itemTrans[q]=itemTrans[indexAbNormalTranslation];
-							itemTrans[indexAbNormalTranslation]=temp;
-							break;
-						} 
-					}
-				}
-				strCorrectSequence+=itemTrans[j]+" ";
-			}*/
-			
-			// ptCorrectTranslated.print(strCorrectSequence+"\n");
 			
 			
 			int numCSourceLine=0,numCTargetLine=0,numIncorrect=0,numCorrect=0;
@@ -294,21 +263,11 @@ public class EvalInOutPrecRecallExpressionInference {
 			}
 			
 			for(int j=0;j<itemSource.length;j++){
-				
-				//&&(!itemTrans[j].startsWith("."))
-				if(checkIdentifierInfo( itemSource[j]) && checkAPIsInLibrary(set5Libraries, mapIdLibrary.get(itemTarget[j]))){
-					/*System.out.println("target info "+mapIdLibrary.get(itemTarget[j]));
-					System.out.println("source info "+itemSource[j]);
-					System.out.println("all info "+mapTotalId.get(itemTarget[j]));
-					*/
-				String strTargetCode=mapIdLibrary.get(itemTarget[j]);
-				String strTargetAPIInfo=mapTotalId.get(itemTarget[j]);
-				String strTransAPIInfo=mapTotalId.get(itemTrans[j]);
-				String strPackageName=getPackageAPIsInLibrary(set5Libraries, strTargetCode);
+				if(!itemTarget[j].equals(itemSource[j])){
 				if(!setVocabTrainSource.contains(itemSource[j])){
 						numCSourceLine++;
-						int currentNumber=mapCountPerLibrary.get(strPackageName).get("OOS");
-						mapCountPerLibrary.get(strPackageName).put("OOS",currentNumber+1);						
+						int currentNumber=mapCountPerLibrary.get(keyMapCountPerLibrary).get("OOS");
+						mapCountPerLibrary.get(keyMapCountPerLibrary).put("OOS",currentNumber+1);						
 						if(!setOutSource.contains(itemSource[j])){
 							strOutSource+=itemSource[j]+" ";
 							setOutSource.add(itemSource[j]);
@@ -321,8 +280,8 @@ public class EvalInOutPrecRecallExpressionInference {
 					//else if(!setVocabTrainTarget.contains(itemTarget[j])){
 						numCTargetLine++;
 						
-						int currentNumber=mapCountPerLibrary.get(strPackageName).get("OOT");
-						mapCountPerLibrary.get(strPackageName).put("OOT",currentNumber+1);
+						int currentNumber=mapCountPerLibrary.get(keyMapCountPerLibrary).get("OOT");
+						mapCountPerLibrary.get(keyMapCountPerLibrary).put("OOT",currentNumber+1);
 						
 						
 						if(!setOutTarget.contains(itemTarget[j])){
@@ -332,14 +291,14 @@ public class EvalInOutPrecRecallExpressionInference {
 					}else if(itemTarget[j].equals(itemTrans[j])){
 						numCorrect++;
 						
-						int currentNumber=mapCountPerLibrary.get(strPackageName).get("Correct");
-						mapCountPerLibrary.get(strPackageName).put("Correct",currentNumber+1);
-						ptCorrect_map.print((i+1)+"\t"+itemSource[j]+"\t"+itemTarget[j]+"\t"+strTargetAPIInfo+"\n");
+						int currentNumber=mapCountPerLibrary.get(keyMapCountPerLibrary).get("Correct");
+						mapCountPerLibrary.get(keyMapCountPerLibrary).put("Correct",currentNumber+1);
+						ptCorrect_map.print((i+1)+"\t"+itemSource[j]+"\t"+itemTarget[j]+"\t"+keyMapCountPerLibrary+"\n");
 //						mapCorrectPrintScreen.get(strPackageName).print(itemSource[j]+","+mapVocabTraining.get(itemSource[j])+"\n");
 					} else{
 						numIncorrect++;
-						int currentNumber=mapCountPerLibrary.get(strPackageName).get("Incorrect");
-						mapCountPerLibrary.get(strPackageName).put("Incorrect",currentNumber+1);
+						int currentNumber=mapCountPerLibrary.get(keyMapCountPerLibrary).get("Incorrect");
+						mapCountPerLibrary.get(keyMapCountPerLibrary).put("Incorrect",currentNumber+1);
 					//	if(!setIncorrect.contains(itemTrans[j]+"(Correct: "+itemTarget[j]+") ")){
 							strIncorrectLog+=itemTrans[j]+"(Correct: "+itemTarget[j]+") ";
 							setIncorrect.add(itemTrans[j]+"(Correct: "+itemTarget[j]+") ");
@@ -350,7 +309,7 @@ public class EvalInOutPrecRecallExpressionInference {
 //								sc.next();
 //							}
 							//
-							ptIncorrect_map.print((i+1)+"\t"+itemSource[j]+"\t"+itemTrans[j]+"\t"+itemTarget[j]+"\t"+strTransAPIInfo+"\t"+strTargetAPIInfo+"\n");
+							ptIncorrect_map.print((i+1)+"\t"+itemSource[j]+"\t"+itemTrans[j]+"\t"+itemTarget[j]+"\n");
 //							mapIncorrectPrintScreen.get(strPackageName).print(itemSource[j]+","+mapVocabTraining.get(itemSource[j])+","+itemTarget[j]+"\n");
 					}
 				}
