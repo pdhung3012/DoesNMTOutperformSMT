@@ -6,28 +6,12 @@ import javax.imageio.stream.FileImageOutputStream;
 
 public class ReorderingTokens {
 
-	public static boolean isEndWith(String sourceItem, String transItem, HashMap<String, String> mapTotalId) {
-		boolean check = false;
-		if (sourceItem.endsWith("#identifier")) {
-			if (transItem.equals(sourceItem)) {
-				check = true;
-			} else if (transItem.startsWith("E-Total")) {
-				String transAPI = mapTotalId.get(transItem);
-			//	System.out.println("check " + mapTotalId.size() + " " + sourceItem);
-				//System.out.println("check " + transAPI.substring(0, transAPI.length() - 3));
-				check = transAPI != null ? transAPI.substring(0, transAPI.length() - 3).endsWith(sourceItem) : false;
-			} else {
-				check = false;
-			}
-
-		} else {
-			return transItem.endsWith(sourceItem);
-		}
-		return check;
+	public static boolean isStartWith(String sourceItem, String transItem) {
+		return transItem.startsWith(sourceItem);
 	}
 
 	public static void reorderingTokens(String fpInputSource, String fpInputTarget, String fpInputTransResult,
-			String fpOutputTrans2Result, HashMap<String, String> mapTotalId) {
+			String fpOutputTrans2Result) {
 		String[] arrInputSource = FileIO.readStringFromFile(fpInputSource).trim().split("\n");
 		String[] arrInputTrans = FileIO.readStringFromFile(fpInputTransResult).trim().split("\n");
 		StringBuilder sbResult = new StringBuilder();
@@ -37,12 +21,12 @@ public class ReorderingTokens {
 			String[] arrItemReordered = new String[arrInputTrans.length];
 			for (int j = 0; j < arrItemSource.length; j++) {
 				if(j<arrItemTrans.length) {
-					if (isEndWith(arrItemSource[j],arrItemTrans[j],mapTotalId)) {
+					if (isStartWith(arrItemSource[j],arrItemTrans[j])) {
 						arrItemReordered[j] = arrInputTrans[j];
 					} else {
 						// find first occurence of ordered and change position
 						for (int k = j + 1; k < arrItemTrans.length; k++) {
-							if (isEndWith(arrItemSource[j], arrItemTrans[k], mapTotalId)) {
+							if (isStartWith(arrItemSource[j], arrItemTrans[k])) {
 								String temp = arrItemTrans[j];
 								arrItemTrans[j] = arrItemTrans[k];
 								arrItemTrans[k] = temp;
