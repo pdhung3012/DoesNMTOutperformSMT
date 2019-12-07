@@ -191,7 +191,7 @@ public class ExtractLevelOfAbstractionFromPLCorpus {
 		String fpFullTextValid = fopInput + "tune.t";
 		String fpFullTextTest = fopInput + "test.t";
 		
-		int levelOfWord=5;
+		int levelOfWord=9;
 
 		new File(PathConstanct.PATH__LEVEL_PL_DATA).mkdir();
 		new File(fopOutput).mkdir();
@@ -249,9 +249,15 @@ public class ExtractLevelOfAbstractionFromPLCorpus {
 		FileIO.copyFileReplaceExist(fopOutput+"test.t", fopDataSMTOutput+"refs"+File.separator+"test"+File.separator+"ref0");
 		
 		
-		generateNMTVocabulary(fopInput,fopNMTOutput);
+		generateNMTVocabulary(fopOutput,fopNMTOutput);
 		generateNMTData(fopOutput, fopNMTOutput);
-		generateNMTsplitLine(fopNMTOutput,fopNMTSplitOutput,50);
+		generateNMTsplitLine(fopNMTOutput,fopNMTSplitOutput,100);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 
 	}

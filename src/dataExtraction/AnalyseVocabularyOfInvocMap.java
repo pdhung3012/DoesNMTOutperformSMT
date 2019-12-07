@@ -30,7 +30,7 @@ public class AnalyseVocabularyOfInvocMap {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		String fopInput=PathConstanct.fop_NL_Data+"conalaAbbrev/v3/";
+		String fopInput=PathConstanct.PATH_SN_GROUP;
 		String fopTrainSource=fopInput+"train.s";
 		String fopTrainTarget=fopInput+"train.t";
 		String fopTuneSource=fopInput+"tune.s";

@@ -76,10 +76,10 @@ public class GenerateCorpusNMTRemoveSparseToken {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String fopInput=PathConstanct.fop_NL_Data+"conalaAbbrev/v3/";
-		String fopOutput=PathConstanct.fop_NL_Data+"conalaAbbrev/v3/"+"v4"+File.separator;
+		String fopInput=PathConstanct.PATH_SN_GROUP;
+		String fopOutput=PathConstanct.PATH_SN_GROUP+"removeSparse"+File.separator;
 		String fpVocab=fopInput+"countVocab.txt";
-		int numAppearInCorpus=10;
+		int numAppearInCorpus=0;
 		
 		new File(fopOutput).mkdir();
 		String[] arrVocabs=FileIO.readStringFromFile(fpVocab).split("\n");
