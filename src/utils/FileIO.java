@@ -16,6 +16,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Optional;
+
+import org.apache.commons.io.FilenameUtils;
 
 public class FileIO {
 
@@ -137,6 +141,23 @@ public class FileIO {
 			}
 		}
 	}
+	
+	public static String getExtensionByStringHandling(String filename) {
+	    return FilenameUtils.getExtension(filename);
+	}
+	
+	public static void findFiles(File root, HashSet<String> setExtensions,
+			ArrayList<String> lstFilePaths) {
+		File[] files = root.listFiles();
+		for (File file : files) {
+			String extension=getExtensionByStringHandling(file.getAbsolutePath());
+			if (file.isFile() && setExtensions.contains(extension)) {
+				lstFilePaths.add(file.getAbsolutePath());
+			} else if (file.isDirectory()) {
+				findFiles(file, setExtensions, lstFilePaths);
+			}
+		}
+	}
 
 	public static String[] findAllJavaFiles(String inputPath) {
 		ArrayList<String> lstRersult = new ArrayList<String>();
@@ -163,14 +184,24 @@ public class FileIO {
 
 		return arrTotal;
 	}
-	
+
 	public static String[] findAllExtensionFiles(String inputPath,String extension) {
 		ArrayList<String> lstRersult = new ArrayList<String>();
 		File fileInput = new File(inputPath);
-		findFiles(fileInput, "java", lstRersult);
+		findFiles(fileInput, extension, lstRersult);
 
 		return convertToArrString(lstRersult);
 	}
+	
+	public static String[] findAllExtensionFiles(String inputPath,HashSet<String> setExtensions) {
+		ArrayList<String> lstRersult = new ArrayList<String>();
+		File fileInput = new File(inputPath);
+		findFiles(fileInput, setExtensions, lstRersult);
+
+		return convertToArrString(lstRersult);
+	}
+	
+	
 	
 	public static String[] convertToArrString(ArrayList<String> lstInput) {
 		String[] arrResult = new String[lstInput.size()];
