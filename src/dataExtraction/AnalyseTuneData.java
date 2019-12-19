@@ -63,11 +63,11 @@ public class AnalyseTuneData {
 		calculateForVocabulary(fopTuneSource, mapVocabulary,mapTune);
 		calculateForVocabulary(fopTuneTarget, mapVocabulary,mapTune);
 		
-		mapVocabulary= SortUtil.sortHashMapStringIntByValueDesc(mapVocabulary);
+		mapTune= SortUtil.sortHashMapStringIntByValueDesc(mapTune);
 		
 		StringBuilder sbResult=new StringBuilder();
-		for(String key:mapVocabulary.keySet()) {
-			sbResult.append(key+"\t"+mapVocabulary.get(key)+"\n");
+		for(String key:mapTune.keySet()) {
+			sbResult.append(key+"\t"+mapTune.get(key)+"\n");
 		}
 		
 		FileIO.writeStringToFile(sbResult.toString()+"\n", fpMapVocabulary);
