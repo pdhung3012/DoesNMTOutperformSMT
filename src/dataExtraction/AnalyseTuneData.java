@@ -52,16 +52,22 @@ public class AnalyseTuneData {
 		String fopTrainTarget=fopInput+"train.t";
 		String fopTuneSource=fopInput+"tune.s";
 		String fopTuneTarget=fopInput+"tune.t";
+		String fopTestSource=fopInput+"test.s";
+		String fopTestTarget=fopInput+"test.t";
 		String fpMapVocabulary=fopInput+"tune_vocabs.txt";
+		String fpTestMapVocabulary=fopInput+"test_vocabs.txt";
 		
 		HashMap<String,Integer> mapVocabulary=new HashMap<String, Integer>();
 		HashMap<String,Integer> mapTune=new HashMap<String, Integer>();
+		HashMap<String,Integer> mapTest=new HashMap<String, Integer>();
 		
 		collectWordsForVocabulary(fopTrainSource, mapVocabulary);
 		collectWordsForVocabulary(fopTrainTarget, mapVocabulary);
 		
 		calculateForVocabulary(fopTuneSource, mapVocabulary,mapTune);
 		calculateForVocabulary(fopTuneTarget, mapVocabulary,mapTune);
+		calculateForVocabulary(fopTestSource, mapVocabulary,mapTest);
+		calculateForVocabulary(fopTestTarget, mapVocabulary,mapTest);
 		
 		mapTune= SortUtil.sortHashMapStringIntByValueDesc(mapTune);
 		
@@ -71,6 +77,15 @@ public class AnalyseTuneData {
 		}
 		
 		FileIO.writeStringToFile(sbResult.toString()+"\n", fpMapVocabulary);
+		
+		mapTest= SortUtil.sortHashMapStringIntByValueDesc(mapTest);
+		
+		sbResult=new StringBuilder();
+		for(String key:mapTest.keySet()) {
+			sbResult.append(key+"\t"+mapTest.get(key)+"\n");
+		}
+		
+		FileIO.writeStringToFile(sbResult.toString()+"\n", fpTestMapVocabulary);
 		
 	}
 
