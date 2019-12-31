@@ -14,7 +14,7 @@ public class PathConstanct {
 	public static String PATH_EVAL_DATA="G:\\dataAbbrevReso\\v3_code\\NMT\\";
 	public static String PATH_SN_GROUP="G:\\dataAbbrevReso\\SeniorDesignData\\";
 	
-	public static String PATH_ANA_AVERAGE_LENGTH="G:\\dataAbbrevReso\\v1_code\\SMT\\";
+	public static String PATH_ANA_AVERAGE_LENGTH="G:\\dataAbbrevReso\\NL\\SMT\\";
 	
 
 }
