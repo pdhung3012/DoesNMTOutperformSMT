@@ -1,5 +1,7 @@
 package analysis;
 
+import java.util.HashSet;
+
 import constanct.PathConstanct;
 import utils.FileIO;
 
@@ -23,6 +25,7 @@ public class CountAverageLengthOfToken {
 		String[] arrTestTarget=FileIO.readFromLargeFile(fpTestTarget).split("\n");
 		
 		long lengthToken=0,numToken=0;
+		HashSet<String> setTokens=new HashSet<String>(); 
 		
 //		for(int i=0;i<arrTrainSource.length;i++) {
 //			String[] arrItems=arrTrainSource[i].split("\\s+");
@@ -38,8 +41,9 @@ public class CountAverageLengthOfToken {
 			String[] arrItems=arrTrainTarget[i].split("\\s+");
 			for(int j=0;j<arrItems.length;j++) {
 				if(!arrItems[j].isEmpty()) {
-					lengthToken+=arrItems[j].length();
-					numToken+=1;
+					setTokens.add(arrItems[j]);
+//					lengthToken+=arrItems[j].length();
+//					numToken+=1;
 				}
 			}
 		}
@@ -58,8 +62,9 @@ public class CountAverageLengthOfToken {
 			String[] arrItems=arrTuneTarget[i].split("\\s+");
 			for(int j=0;j<arrItems.length;j++) {
 				if(!arrItems[j].isEmpty()) {
-					lengthToken+=arrItems[j].length();
-					numToken+=1;
+//					lengthToken+=arrItems[j].length();
+//					numToken+=1;
+					setTokens.add(arrItems[j]);
 				}
 			}
 		}
@@ -79,10 +84,16 @@ public class CountAverageLengthOfToken {
 			String[] arrItems=arrTestTarget[i].split("\\s+");
 			for(int j=0;j<arrItems.length;j++) {
 				if(!arrItems[j].isEmpty()) {
-					lengthToken+=arrItems[j].length();
-					numToken+=1;
+					setTokens.add(arrItems[j]);
+//					lengthToken+=arrItems[j].length();
+//					numToken+=1;
 				}
 			}
+		}
+		
+		for(String key:setTokens) {
+			numToken+=1;
+			lengthToken+=key.length();
 		}
 		
 		double average=(lengthToken*1.0)/numToken;
