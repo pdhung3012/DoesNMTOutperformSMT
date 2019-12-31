@@ -24,15 +24,15 @@ public class CountAverageLengthOfToken {
 		
 		long lengthToken=0,numToken=0;
 		
-		for(int i=0;i<arrTrainSource.length;i++) {
-			String[] arrItems=arrTrainSource[i].split("\\s+");
-			for(int j=0;j<arrItems.length;j++) {
-				if(!arrItems[j].isEmpty()) {
-					lengthToken+=arrItems[j].length();
-					numToken+=1;
-				}
-			}
-		}
+//		for(int i=0;i<arrTrainSource.length;i++) {
+//			String[] arrItems=arrTrainSource[i].split("\\s+");
+//			for(int j=0;j<arrItems.length;j++) {
+//				if(!arrItems[j].isEmpty()) {
+//					lengthToken+=arrItems[j].length();
+//					numToken+=1;
+//				}
+//			}
+//		}
 		
 		for(int i=0;i<arrTrainTarget.length;i++) {
 			String[] arrItems=arrTrainTarget[i].split("\\s+");
@@ -44,15 +44,15 @@ public class CountAverageLengthOfToken {
 			}
 		}
 		
-		for(int i=0;i<arrTuneSource.length;i++) {
-			String[] arrItems=arrTuneSource[i].split("\\s+");
-			for(int j=0;j<arrItems.length;j++) {
-				if(!arrItems[j].isEmpty()) {
-					lengthToken+=arrItems[j].length();
-					numToken+=1;
-				}
-			}
-		}
+//		for(int i=0;i<arrTuneSource.length;i++) {
+//			String[] arrItems=arrTuneSource[i].split("\\s+");
+//			for(int j=0;j<arrItems.length;j++) {
+//				if(!arrItems[j].isEmpty()) {
+//					lengthToken+=arrItems[j].length();
+//					numToken+=1;
+//				}
+//			}
+//		}
 		
 		for(int i=0;i<arrTuneTarget.length;i++) {
 			String[] arrItems=arrTuneTarget[i].split("\\s+");
@@ -64,15 +64,15 @@ public class CountAverageLengthOfToken {
 			}
 		}
 		
-		for(int i=0;i<arrTestSource.length;i++) {
-			String[] arrItems=arrTestSource[i].split("\\s+");
-			for(int j=0;j<arrItems.length;j++) {
-				if(!arrItems[j].isEmpty()) {
-					lengthToken+=arrItems[j].length();
-					numToken+=1;
-				}
-			}
-		}
+//		for(int i=0;i<arrTestSource.length;i++) {
+//			String[] arrItems=arrTestSource[i].split("\\s+");
+//			for(int j=0;j<arrItems.length;j++) {
+//				if(!arrItems[j].isEmpty()) {
+//					lengthToken+=arrItems[j].length();
+//					numToken+=1;
+//				}
+//			}
+//		}
 
 		for(int i=0;i<arrTestTarget.length;i++) {
 			String[] arrItems=arrTestTarget[i].split("\\s+");
