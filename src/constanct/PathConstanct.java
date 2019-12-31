@@ -10,8 +10,8 @@ public class PathConstanct {
 	public static String PATH_PROJECT_TRAIN_TEST_NAME="G:\\dataAbbrevReso\\seqTrainTestTuneOrigin\\";
 	public static String PATH_PL_DATA="G:\\dataAbbrevReso\\seqTrainTestTuneOrigin\\";
 	public static String PATH__LEVEL_PL_DATA="G:\\dataAbbrevReso\\v3_code\\";
-	public static String PATH_COMBINE_DATA="G:\\dataAbbrevReso\\v2_code\\NMTSplit\\";
-	public static String PATH_EVAL_DATA="G:\\dataAbbrevReso\\v2_code\\NMT\\";
+	public static String PATH_COMBINE_DATA="G:\\dataAbbrevReso\\v3_code\\NMTSplit\\";
+	public static String PATH_EVAL_DATA="G:\\dataAbbrevReso\\v3_code\\NMT\\";
 	public static String PATH_SN_GROUP="G:\\dataAbbrevReso\\SeniorDesignData\\";
 	
 
