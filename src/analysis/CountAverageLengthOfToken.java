@@ -7,7 +7,7 @@ public class CountAverageLengthOfToken {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String fopInput=PathConstanct.PATH_SN_GROUP;
+		String fopInput=PathConstanct.PATH_ANA_AVERAGE_LENGTH;
 		String fpTrainSource=fopInput+"train.s";
 		String fpTrainTarget=fopInput+"train.t";
 		String fpTuneSource=fopInput+"tune.s";
