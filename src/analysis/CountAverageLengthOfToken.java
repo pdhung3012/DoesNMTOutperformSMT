@@ -74,6 +74,7 @@ public class CountAverageLengthOfToken {
 //			}
 //		}
 
+		
 		for(int i=0;i<arrTestTarget.length;i++) {
 			String[] arrItems=arrTestTarget[i].split("\\s+");
 			for(int j=0;j<arrItems.length;j++) {
