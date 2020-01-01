@@ -114,7 +114,7 @@ public class CountAverageLengthOfToken {
 		
 		StringBuilder sbResult=new StringBuilder();
 		for(String key:list) {
-			sbResult.append(key+"\t"+key.length());
+			sbResult.append(key+"\t"+key.length()+"\n");
 		}
 		FileIO.writeStringToFile(sbResult.toString(), fpOrderVocab);
 		
