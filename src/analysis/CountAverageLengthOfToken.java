@@ -1,9 +1,14 @@
 package analysis;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 
 import constanct.PathConstanct;
 import utils.FileIO;
+import utils.SortUtil;
 
 public class CountAverageLengthOfToken {
 
@@ -16,6 +21,7 @@ public class CountAverageLengthOfToken {
 		String fpTuneTarget=fopInput+"tune.t";
 		String fpTestSource=fopInput+"test.s";
 		String fpTestTarget=fopInput+"test.t";
+		String fpOrderVocab=fopInput+"lengthVocab.txt";
 		
 		String[] arrTrainSource=FileIO.readFromLargeFile(fpTrainSource).split("\n");
 		String[] arrTrainTarget=FileIO.readFromLargeFile(fpTrainTarget).split("\n");
@@ -96,8 +102,26 @@ public class CountAverageLengthOfToken {
 			lengthToken+=key.length();
 		}
 		
+		Comparator<String> compareByLength = new Comparator<String>() {
+		    @Override
+		    public int compare(String o1, String o2) {
+		        return o1.length()-o2.length();
+		    }
+		};
+		
+		List<String> list = new ArrayList<String>(setTokens);
+		Collections.sort(list,compareByLength);
+		
+		StringBuilder sbResult=new StringBuilder();
+		for(String key:list) {
+			sbResult.append(key+"\t"+key.length());
+		}
+		FileIO.writeStringToFile(sbResult.toString(), fpOrderVocab);
+		
 		double average=(lengthToken*1.0)/numToken;
 		System.out.println(numToken+"\t"+average);
+		
+		
 		
 		
 	}
