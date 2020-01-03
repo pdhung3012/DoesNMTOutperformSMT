@@ -51,13 +51,13 @@ public class TypeOfCodeTokenRegex {
 			isMethodTemplate=true;
 		}
 		
-		if(checkStringInListOfRegex(strItemCheck, ArrMethodNameRegex) && (isMethodTemplate 
+		if(checkStringInListOfRegex(strItemCheck, ArrNumericRegex)) {
+				return TypeOfCodeTokenRegex.NumericType;
+		} else if(checkStringInListOfRegex(strItemCheck, ArrMethodNameRegex) && (isMethodTemplate 
 				|| (((index+1)<arrTarget.length)&& arrTarget[index+1].startsWith("(")))){
 			return TypeOfCodeTokenRegex.MethodNameType;
 		} else if(checkStringInListOfRegex(strItemCheck, ArrConstanctRegex)) {
 			return TypeOfCodeTokenRegex.ConstanctType;
-		} else if(checkStringInListOfRegex(strItemCheck, ArrNumericRegex)) {
-			return TypeOfCodeTokenRegex.NumericType;
 		} else if(checkStringInListOfRegex(strItemCheck, ArrClassNameRegex)) {
 			return TypeOfCodeTokenRegex.ClassNameType;
 		} else if(checkStringInListOfRegex(strItemCheck, ArrVariableRegex)) {
@@ -70,7 +70,7 @@ public class TypeOfCodeTokenRegex {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String input="123";
+		String input="123.2";
 		TypeOfCodeTokenRegex type=new TypeOfCodeTokenRegex();
 		System.out.println(type.checkStringInListOfRegex(input, TypeOfCodeTokenRegex.ArrConstanctRegex));
 		System.out.println(type.checkStringInListOfRegex(input, TypeOfCodeTokenRegex.ArrNumericRegex));
