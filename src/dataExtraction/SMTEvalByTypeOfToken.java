@@ -160,7 +160,7 @@ public class SMTEvalByTypeOfToken {
 			mapElement.put("Incorrect", 0);
 			mapElement.put("OOT", 0);
 			mapElement.put("OOS", 0);
-			mapCountPerLibrary.put(keyMapCountPerLibrary, mapElement);
+			mapCountPerLibrary.put(strItem, mapElement);
 		}
 		
 		
