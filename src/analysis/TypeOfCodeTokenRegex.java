@@ -47,7 +47,7 @@ public class TypeOfCodeTokenRegex {
 		String strItemCheck=strElement;
 		boolean isMethodTemplate=false;
 		if(strElement.endsWith("(")||strElement.endsWith("()")) {
-			strItemCheck=strElement.substring(0,strElement.indexOf(0));
+			strItemCheck=strElement.substring(0,strElement.indexOf("("));
 			isMethodTemplate=true;
 		}
 		
