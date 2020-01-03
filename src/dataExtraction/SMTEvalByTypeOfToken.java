@@ -135,6 +135,7 @@ public class SMTEvalByTypeOfToken {
 		set5Libraries.add(TypeOfCodeTokenRegex.ConstanctType);
 		set5Libraries.add(TypeOfCodeTokenRegex.NumericType);
 		set5Libraries.add(TypeOfCodeTokenRegex.StringLiteralType);
+		set5Libraries.add(TypeOfCodeTokenRegex.OtherType);
 //		
 		HashMap<String,PrintStream> mapCorrectPrintScreen=new HashMap<String, PrintStream>();
 		HashMap<String,PrintStream> mapIncorrectPrintScreen=new HashMap<String, PrintStream>();
