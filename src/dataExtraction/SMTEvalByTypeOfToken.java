@@ -355,16 +355,16 @@ public class SMTEvalByTypeOfToken {
 		double recall=countCorrect*1.0/(countCorrect+countIncorrect+countAllOutOfVocab);
 		double f1score=precision*recall*2/(precision+recall);
 		
-		FileUtil.appendToFile(fop_output+fn_result, countCorrect+"\t"+countIncorrect+"\t"+countOutOfSource+"\t"+countOutOfTarget+"\t"+countAllOutOfVocab+"\t"+precision+"\t"+recall+"\t"+f1score+"\n");
-		FileUtil.appendToFile(fop_output+fn_result, "Precision in-vocab: "+countCorrect*1.0/(countCorrect+countIncorrect)+"\n");
-		FileUtil.appendToFile(fop_output+fn_result, "Recall out-vocab: "+countCorrect*1.0/(countCorrect+countIncorrect+countAllOutOfVocab)+"\n");
+		FileUtil.appendToFile(fop_output+fn_result, "Precision: "+countCorrect*1.0/(countCorrect+countIncorrect)+"\n");
+		FileUtil.appendToFile(fop_output+fn_result, "Recall: "+countCorrect*1.0/(countCorrect+countAllOutOfVocab)+"\n");
+		FileUtil.appendToFile(fop_output+fn_result, "Total:\t"+countCorrect+"\t"+countIncorrect+"\t"+countOutOfSource+"\t"+countOutOfTarget+"\t"+countAllOutOfVocab+"\t"+precision+"\t"+recall+"\t"+f1score+"\n");
 		
 		for(String strItem:mapCountPerLibrary.keySet()){
 			HashMap<String,Integer> mapTemp=mapCountPerLibrary.get(strItem);
 			precision=mapTemp.get("Correct")*1.0/(mapTemp.get("Correct")+mapTemp.get("Incorrect"));
-			recall=mapTemp.get("Correct")*1.0/(mapTemp.get("Correct")+mapTemp.get("Incorrect")+(mapTemp.get("OOS")+mapTemp.get("OOT")));
+			recall=mapTemp.get("Correct")*1.0/(mapTemp.get("Correct")+(mapTemp.get("OOS")+mapTemp.get("OOT")));
 			f1score=precision*recall*2/(precision+recall);
-			FileUtil.appendToFile(fop_output+fn_result, strItem+": "+mapTemp.get("Correct")+"\t"+mapTemp.get("Incorrect")+"\t"+mapTemp.get("OOS")+"\t"+mapTemp.get("OOT")+"\t"+(mapTemp.get("OOS")+mapTemp.get("OOT"))+"\t"+precision+"\t"+recall+"\t"+f1score+"\n");
+			FileUtil.appendToFile(fop_output+fn_result, strItem+":\t"+mapTemp.get("Correct")+"\t"+mapTemp.get("Incorrect")+"\t"+mapTemp.get("OOS")+"\t"+mapTemp.get("OOT")+"\t"+(mapTemp.get("OOS")+mapTemp.get("OOT"))+"\t"+precision+"\t"+recall+"\t"+f1score+"\n");
 		}
 		
 		
