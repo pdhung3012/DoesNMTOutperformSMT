@@ -352,11 +352,11 @@ public class SMTEvalByTypeOfToken {
 			
 		}
 		double precision=countCorrect*1.0/(countCorrect+countIncorrect);
-		double recall=countCorrect*1.0/(countCorrect+countIncorrect+countAllOutOfVocab);
+		double recall=countCorrect*1.0/(countCorrect+countAllOutOfVocab);
 		double f1score=precision*recall*2/(precision+recall);
 		
-		FileUtil.appendToFile(fop_output+fn_result, "Precision: "+countCorrect*1.0/(countCorrect+countIncorrect)+"\n");
-		FileUtil.appendToFile(fop_output+fn_result, "Recall: "+countCorrect*1.0/(countCorrect+countAllOutOfVocab)+"\n");
+//		FileUtil.appendToFile(fop_output+fn_result, "Precision: "+countCorrect*1.0/(countCorrect+countIncorrect)+"\n");
+//		FileUtil.appendToFile(fop_output+fn_result, "Recall: "+countCorrect*1.0/(countCorrect+countAllOutOfVocab)+"\n");
 		FileUtil.appendToFile(fop_output+fn_result, "Total:\t"+countCorrect+"\t"+countIncorrect+"\t"+countOutOfSource+"\t"+countOutOfTarget+"\t"+countAllOutOfVocab+"\t"+precision+"\t"+recall+"\t"+f1score+"\n");
 		
 		for(String strItem:mapCountPerLibrary.keySet()){
