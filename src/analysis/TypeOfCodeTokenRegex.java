@@ -53,7 +53,8 @@ public class TypeOfCodeTokenRegex {
 		
 		if(checkStringInListOfRegex(strItemCheck, ArrNumericRegex)) {
 				return TypeOfCodeTokenRegex.NumericType;
-		} else if(checkStringInListOfRegex(strItemCheck, ArrMethodNameRegex) && (isMethodTemplate 
+		} 
+		else if(checkStringInListOfRegex(strItemCheck, ArrMethodNameRegex) && (isMethodTemplate 
 				|| (((index+1)<arrTarget.length)&& arrTarget[index+1].startsWith("(")))){
 			return TypeOfCodeTokenRegex.MethodNameType;
 		} else if(checkStringInListOfRegex(strItemCheck, ArrConstanctRegex)) {
