@@ -268,9 +268,9 @@ public class SMTEvalByTypeOfToken {
 			System.out.println("Line "+i);
 			
 			
-			if(itemSource.length>itemTrans.length) {
-				continue;
-			}
+//			if(itemSource.length>itemTrans.length) {
+//				continue;
+//			}
 			
 			for(int j=0;j<itemSource.length;j++){
 				keyMapCountPerLibrary=typeCodeToken.getTypeOfToken(itemTarget[j], itemTarget, j);
