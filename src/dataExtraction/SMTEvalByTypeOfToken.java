@@ -412,6 +412,7 @@ public class SMTEvalByTypeOfToken {
 			
 		//	System.out.println(mapTemp.toString());
 			mapTemp=mapCountPrecisionInTraining.get(strItem);
+			System.out.println(mapTemp.keySet().toString());
 			correctNum=mapTemp.get(name_map_2_10+strCorrect);
 			incNum=mapTemp.get(name_map_2_10+strIncorrect);
 			precision=((correctNum+incNum)!=0)?(correctNum*1.0/(correctNum+incNum)):0;
