@@ -339,10 +339,10 @@ public class SMTEvalByTypeOfToken {
 						int currentNumber=mapCountPerLibrary.get(keyMapCountPerLibrary).get("Correct");
 						mapCountPerLibrary.get(keyMapCountPerLibrary).put("Correct",currentNumber+1);
 						ptCorrect_map.print((i+1)+"\t"+itemSource[j]+"\t"+itemTarget[j]+"\t"+keyMapCountPerLibrary+"\n");
-						mapCorrectPrintScreen.get(keyMapCountPerLibrary).print(itemSource[j]+","+mapVocabTraining.get(itemSource[j])+"\n");
+						mapCorrectPrintScreen.get(keyMapCountPerLibrary).print((i+1)+","+itemSource[j]+","+mapVocabTraining.get(itemSource[j])+"\n");
 						
 						String keyItem="per_cor_"+keyMapCountPerLibrary+"_"+itemMapBunchName;
-						mapPercentagePrintScreen.get(keyItem).print(itemSource[j]+","+mapVocabTraining.get(itemSource[j])+","+numAppearInTrainOfSource+"\n");
+						mapPercentagePrintScreen.get(keyItem).print((i+1)+","+itemSource[j]+","+mapVocabTraining.get(itemSource[j])+","+numAppearInTrainOfSource+"\n");
 					} else{
 						numIncorrect++;
 						
@@ -379,10 +379,10 @@ public class SMTEvalByTypeOfToken {
 //							}
 							//
 							ptIncorrect_map.print((i+1)+"\t"+itemSource[j]+"\t"+itemTrans[j]+"\t"+itemTarget[j]+"\n");
-							mapIncorrectPrintScreen.get(keyMapCountPerLibrary).print(itemSource[j]+","+mapVocabTraining.get(itemSource[j])+","+itemTarget[j]+"\n");
+							mapIncorrectPrintScreen.get(keyMapCountPerLibrary).print((i+1)+","+itemSource[j]+","+mapVocabTraining.get(itemSource[j])+","+itemTarget[j]+"\n");
 							
 							String keyItem="per_inc_"+keyMapCountPerLibrary+"_"+itemMapBunchName;
-							mapPercentagePrintScreen.get(keyItem).print(itemSource[j]+","+mapVocabTraining.get(itemSource[j])+","+itemTarget[j]+","+numAppearInTrainOfSource+"\n");
+							mapPercentagePrintScreen.get(keyItem).print((i+1)+","+itemSource[j]+","+mapVocabTraining.get(itemSource[j])+","+itemTarget[j]+","+numAppearInTrainOfSource+"\n");
 					}
 				}
 												
