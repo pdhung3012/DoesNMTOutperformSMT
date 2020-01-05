@@ -285,7 +285,7 @@ public class SMTEvalByTypeOfToken {
 						
 						numCorrect++;
 						
-						int numAppearInTrainOfSource=mapCountPrecisionInTraining.get(itemSource[j]).size();						
+						int numAppearInTrainOfSource=mapCountAppearInTrain.get(itemSource[j]).size();						
 						String itemMapBunchName="";
 						if(numAppearInTrainOfSource<=10) {
 							itemMapBunchName=name_map_1_10;
@@ -308,7 +308,7 @@ public class SMTEvalByTypeOfToken {
 					} else{
 						numIncorrect++;
 						
-						int numAppearInTrainOfSource=mapCountPrecisionInTraining.get(itemSource[j]).size();						
+						int numAppearInTrainOfSource=mapCountAppearInTrain.get(itemSource[j]).size();						
 						String itemMapBunchName="";
 						if(numAppearInTrainOfSource<=10) {
 							itemMapBunchName=name_map_1_10;
