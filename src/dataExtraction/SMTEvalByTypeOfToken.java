@@ -44,7 +44,7 @@ public class SMTEvalByTypeOfToken {
 //		String fn_vocabulary="vocabulary.txt";
 		
 		String name_map_1="map_1";
-		String name_map_2_10="map_2-10";
+		String name_map_2_10="map_2A";
 		String name_map_11_20="map_11-20";
 		String name_map_21_50="map_21-50";
 		String name_map_51_100="map_51-100";
@@ -410,6 +410,8 @@ public class SMTEvalByTypeOfToken {
 			strContent+=precision+"\t";
 			num1+=correctNum+incNum;
 			
+		//	System.out.println(mapTemp.toString());
+			mapTemp=mapCountPrecisionInTraining.get(strItem);
 			correctNum=mapTemp.get(name_map_2_10+strCorrect);
 			incNum=mapTemp.get(name_map_2_10+strIncorrect);
 			precision=((correctNum+incNum)!=0)?(correctNum*1.0/(correctNum+incNum)):0;
