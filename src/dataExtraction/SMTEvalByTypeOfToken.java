@@ -90,6 +90,7 @@ public class SMTEvalByTypeOfToken {
 //		
 		HashMap<String,PrintStream> mapCorrectPrintScreen=new HashMap<String, PrintStream>();
 		HashMap<String,PrintStream> mapIncorrectPrintScreen=new HashMap<String, PrintStream>();
+		HashMap<String,PrintStream> mapPercentagePrintScreen=new HashMap<String, PrintStream>();
 		
 		
 		for(String strKey:set5Libraries){
@@ -98,6 +99,34 @@ public class SMTEvalByTypeOfToken {
 				PrintStream ptIncorrectResult=new PrintStream(new FileOutputStream(fop_output+"inc_"+strKey+".txt"));
 				mapCorrectPrintScreen.put(strKey, ptCorrectResult);
 				mapIncorrectPrintScreen.put(strKey, ptIncorrectResult);
+				
+				PrintStream ptPercentageCorrectResult1=new PrintStream(new FileOutputStream(fop_output+"per_cor_"+strKey+"_"+name_map_1+".txt"));
+				PrintStream ptPercentageIncorrectResult1=new PrintStream(new FileOutputStream(fop_output+"per_inc_"+strKey+"_"+name_map_1+".txt"));
+				PrintStream ptPercentageCorrectResult2_10=new PrintStream(new FileOutputStream(fop_output+"per_cor_"+strKey+"_"+name_map_2_10+".txt"));
+				PrintStream ptPercentageIncorrectResult2_10=new PrintStream(new FileOutputStream(fop_output+"per_inc_"+strKey+"_"+name_map_2_10+".txt"));
+				PrintStream ptPercentageCorrectResult11_20=new PrintStream(new FileOutputStream(fop_output+"per_cor_"+strKey+"_"+name_map_11_20+".txt"));
+				PrintStream ptPercentageIncorrectResult11_20=new PrintStream(new FileOutputStream(fop_output+"per_inc_"+strKey+"_"+name_map_11_20+".txt"));
+				PrintStream ptPercentageCorrectResult21_50=new PrintStream(new FileOutputStream(fop_output+"per_cor_"+strKey+"_"+name_map_21_50+".txt"));
+				PrintStream ptPercentageIncorrectResult21_50=new PrintStream(new FileOutputStream(fop_output+"per_inc_"+strKey+"_"+name_map_21_50+".txt"));
+				PrintStream ptPercentageCorrectResult51_100=new PrintStream(new FileOutputStream(fop_output+"per_cor_"+strKey+"_"+name_map_51_100+".txt"));
+				PrintStream ptPercentageIncorrectResult51_100=new PrintStream(new FileOutputStream(fop_output+"per_inc_"+strKey+"_"+name_map_51_100+".txt"));
+				PrintStream ptPercentageCorrectResult101=new PrintStream(new FileOutputStream(fop_output+"per_cor_"+strKey+"_"+name_map_greaterThan_100+".txt"));
+				PrintStream ptPercentageIncorrectResult101=new PrintStream(new FileOutputStream(fop_output+"per_inc_"+strKey+"_"+name_map_greaterThan_100+".txt"));
+				
+				mapPercentagePrintScreen.put("per_cor_"+strKey+"_"+name_map_1, ptPercentageCorrectResult1);
+				mapPercentagePrintScreen.put("per_inc_"+strKey+"_"+name_map_1, ptPercentageCorrectResult1);
+				mapPercentagePrintScreen.put("per_cor_"+strKey+"_"+name_map_2_10, ptPercentageCorrectResult1);
+				mapPercentagePrintScreen.put("per_inc_"+strKey+"_"+name_map_2_10, ptPercentageCorrectResult1);
+				mapPercentagePrintScreen.put("per_cor_"+strKey+"_"+name_map_11_20, ptPercentageCorrectResult1);
+				mapPercentagePrintScreen.put("per_inc_"+strKey+"_"+name_map_11_20, ptPercentageCorrectResult1);
+				mapPercentagePrintScreen.put("per_cor_"+strKey+"_"+name_map_21_50, ptPercentageCorrectResult1);
+				mapPercentagePrintScreen.put("per_inc_"+strKey+"_"+name_map_21_50, ptPercentageCorrectResult1);
+				mapPercentagePrintScreen.put("per_cor_"+strKey+"_"+name_map_51_100, ptPercentageCorrectResult1);
+				mapPercentagePrintScreen.put("per_inc_"+strKey+"_"+name_map_51_100, ptPercentageCorrectResult1);
+				mapPercentagePrintScreen.put("per_cor_"+strKey+"_"+name_map_greaterThan_100, ptPercentageCorrectResult1);
+				mapPercentagePrintScreen.put("per_inc_"+strKey+"_"+name_map_greaterThan_100, ptPercentageCorrectResult1);
+				
+				
 			}catch(Exception ex){
 				
 			}
@@ -311,6 +340,9 @@ public class SMTEvalByTypeOfToken {
 						mapCountPerLibrary.get(keyMapCountPerLibrary).put("Correct",currentNumber+1);
 						ptCorrect_map.print((i+1)+"\t"+itemSource[j]+"\t"+itemTarget[j]+"\t"+keyMapCountPerLibrary+"\n");
 						mapCorrectPrintScreen.get(keyMapCountPerLibrary).print(itemSource[j]+","+mapVocabTraining.get(itemSource[j])+"\n");
+						
+						String keyItem="per_cor_"+keyMapCountPerLibrary+"_"+itemMapBunchName;
+						mapPercentagePrintScreen.get(keyItem).print(itemSource[j]+","+mapVocabTraining.get(itemSource[j])+","+numAppearInTrainOfSource+"\n");
 					} else{
 						numIncorrect++;
 						
@@ -348,6 +380,9 @@ public class SMTEvalByTypeOfToken {
 							//
 							ptIncorrect_map.print((i+1)+"\t"+itemSource[j]+"\t"+itemTrans[j]+"\t"+itemTarget[j]+"\n");
 							mapIncorrectPrintScreen.get(keyMapCountPerLibrary).print(itemSource[j]+","+mapVocabTraining.get(itemSource[j])+","+itemTarget[j]+"\n");
+							
+							String keyItem="per_inc_"+keyMapCountPerLibrary+"_"+itemMapBunchName;
+							mapPercentagePrintScreen.get(keyItem).print(itemSource[j]+","+mapVocabTraining.get(itemSource[j])+","+itemTarget[j]+","+numAppearInTrainOfSource+"\n");
 					}
 				}
 												
