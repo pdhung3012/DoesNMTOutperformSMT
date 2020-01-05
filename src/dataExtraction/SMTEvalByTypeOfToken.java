@@ -411,14 +411,14 @@ public class SMTEvalByTypeOfToken {
 			num1+=correctNum+incNum;
 			
 		//	System.out.println(mapTemp.toString());
-			HashMap<String,Integer> mapTemp2=mapCountPrecisionInTraining.get(strItem);
-			System.out.println(name_map_2_10+"  "+mapTemp2.keySet().toString());
-			correctNum=mapTemp2.get(name_map_2_10+"Correct");
-			incNum=mapTemp2.get(name_map_2_10+strIncorrect);
+//			HashMap<String,Integer> mapTemp2=mapCountPrecisionInTraining.get(strItem);
+//			System.out.println(name_map_2_10+"  "+mapTemp2.keySet().toString());
+			correctNum=mapTemp.get(name_map_2_10+strCorrect);
+			incNum=mapTemp.get(name_map_2_10+strIncorrect);
 			precision=((correctNum+incNum)!=0)?(correctNum*1.0/(correctNum+incNum)):0;
 			numberOfCasePerLib+=correctNum+incNum;
 			strContent+=precision+"\t";
-			name_map_2_10+=correctNum+incNum;
+			num2_10+=correctNum+incNum;
 			
 			correctNum=mapTemp.get(name_map_11_20+strCorrect);
 			incNum=mapTemp.get(name_map_11_20+strIncorrect);
