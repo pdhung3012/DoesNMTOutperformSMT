@@ -386,6 +386,7 @@ public class SMTEvalByTypeOfToken {
 		FileUtil.appendToFile(fop_output+fn_result,"Precision per mapping number\n");
 		//print percentage per library
 		
+		int num1_10=0,num11_20=0,num21_50=0,num51_100=0,num_101=0;
 		
 		for(String strItem:mapCountPrecisionInTraining.keySet()) {
 			
@@ -398,36 +399,48 @@ public class SMTEvalByTypeOfToken {
 			numberOfCasePerLib+=correctNum+incNum;
 			precision=((correctNum+incNum)!=0)?(correctNum*1.0/(correctNum+incNum)):0;
 			strContent+=precision+"\t";
+			num1_10+=correctNum+incNum;
 			
 			correctNum=mapTemp.get(name_map_11_20+strCorrect);
 			incNum=mapTemp.get(name_map_11_20+strIncorrect);
 			precision=((correctNum+incNum)!=0)?(correctNum*1.0/(correctNum+incNum)):0;
 			numberOfCasePerLib+=correctNum+incNum;
 			strContent+=precision+"\t";
+			num11_20+=correctNum+incNum;
 			
 			correctNum=mapTemp.get(name_map_21_50+strCorrect);
 			incNum=mapTemp.get(name_map_21_50+strIncorrect);
 			precision=((correctNum+incNum)!=0)?(correctNum*1.0/(correctNum+incNum)):0;
 			numberOfCasePerLib+=correctNum+incNum;
 			strContent+=precision+"\t";
+			num21_50+=correctNum+incNum;
 			
 			correctNum=mapTemp.get(name_map_51_100+strCorrect);
 			incNum=mapTemp.get(name_map_51_100+strIncorrect);
 			precision=((correctNum+incNum)!=0)?(correctNum*1.0/(correctNum+incNum)):0;
 			numberOfCasePerLib+=correctNum+incNum;
 			strContent+=precision+"\t";
+			num51_100+=correctNum+incNum;
 			
 			correctNum=mapTemp.get(name_map_greaterThan_100+strCorrect);
 			incNum=mapTemp.get(name_map_greaterThan_100+strIncorrect);
 			precision=((correctNum+incNum)!=0)?(correctNum*1.0/(correctNum+incNum)):0;
 			numberOfCasePerLib+=correctNum+incNum;
 			strContent+=precision+"\t";
+			num_101+=correctNum+incNum;
 			
-			strContent+=numberOfCasePerLib+"\n";
-			FileUtil.appendToFile(fop_output+fn_result, strContent);
+//			strContent+=numberOfCasePerLib+"\n";
+			FileUtil.appendToFile(fop_output+fn_result, strContent+"\n");
 
 			
 		}
+		
+		int total=num1_10+num11_20+num21_50+num51_100+num_101;
+		
+		FileUtil.appendToFile(fop_output+fn_result,"Total:\t"+num1_10+"\t"+num11_20+"\t"+num21_50+"\t"+num51_100+"\t"+num_101+"\n");
+		
+		FileUtil.appendToFile(fop_output+fn_result,"Percentage:\t"+num1_10*1.0/total+"\t"+num11_20*1.0/total+"\t"+num21_50*1.0/total+"\t"+num51_100*1.0/total+"\t"+num_101*1.0/total+"\n");
+		
 		
 	}
 
