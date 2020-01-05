@@ -114,17 +114,17 @@ public class SMTEvalByTypeOfToken {
 				PrintStream ptPercentageIncorrectResult101=new PrintStream(new FileOutputStream(fop_output+"per_inc_"+strKey+"_"+name_map_greaterThan_100+".txt"));
 				
 				mapPercentagePrintScreen.put("per_cor_"+strKey+"_"+name_map_1, ptPercentageCorrectResult1);
-				mapPercentagePrintScreen.put("per_inc_"+strKey+"_"+name_map_1, ptPercentageCorrectResult1);
-				mapPercentagePrintScreen.put("per_cor_"+strKey+"_"+name_map_2_10, ptPercentageCorrectResult1);
-				mapPercentagePrintScreen.put("per_inc_"+strKey+"_"+name_map_2_10, ptPercentageCorrectResult1);
-				mapPercentagePrintScreen.put("per_cor_"+strKey+"_"+name_map_11_20, ptPercentageCorrectResult1);
-				mapPercentagePrintScreen.put("per_inc_"+strKey+"_"+name_map_11_20, ptPercentageCorrectResult1);
-				mapPercentagePrintScreen.put("per_cor_"+strKey+"_"+name_map_21_50, ptPercentageCorrectResult1);
-				mapPercentagePrintScreen.put("per_inc_"+strKey+"_"+name_map_21_50, ptPercentageCorrectResult1);
-				mapPercentagePrintScreen.put("per_cor_"+strKey+"_"+name_map_51_100, ptPercentageCorrectResult1);
-				mapPercentagePrintScreen.put("per_inc_"+strKey+"_"+name_map_51_100, ptPercentageCorrectResult1);
-				mapPercentagePrintScreen.put("per_cor_"+strKey+"_"+name_map_greaterThan_100, ptPercentageCorrectResult1);
-				mapPercentagePrintScreen.put("per_inc_"+strKey+"_"+name_map_greaterThan_100, ptPercentageCorrectResult1);
+				mapPercentagePrintScreen.put("per_inc_"+strKey+"_"+name_map_1, ptPercentageIncorrectResult1);
+				mapPercentagePrintScreen.put("per_cor_"+strKey+"_"+name_map_2_10, ptPercentageCorrectResult2_10);
+				mapPercentagePrintScreen.put("per_inc_"+strKey+"_"+name_map_2_10, ptPercentageIncorrectResult2_10);
+				mapPercentagePrintScreen.put("per_cor_"+strKey+"_"+name_map_11_20, ptPercentageCorrectResult11_20);
+				mapPercentagePrintScreen.put("per_inc_"+strKey+"_"+name_map_11_20, ptPercentageIncorrectResult11_20);
+				mapPercentagePrintScreen.put("per_cor_"+strKey+"_"+name_map_21_50, ptPercentageCorrectResult21_50);
+				mapPercentagePrintScreen.put("per_inc_"+strKey+"_"+name_map_21_50, ptPercentageIncorrectResult21_50);
+				mapPercentagePrintScreen.put("per_cor_"+strKey+"_"+name_map_51_100, ptPercentageCorrectResult51_100);
+				mapPercentagePrintScreen.put("per_inc_"+strKey+"_"+name_map_51_100, ptPercentageIncorrectResult51_100);
+				mapPercentagePrintScreen.put("per_cor_"+strKey+"_"+name_map_greaterThan_100, ptPercentageCorrectResult101);
+				mapPercentagePrintScreen.put("per_inc_"+strKey+"_"+name_map_greaterThan_100, ptPercentageIncorrectResult101);
 				
 				
 			}catch(Exception ex){
