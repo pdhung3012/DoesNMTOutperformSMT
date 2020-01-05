@@ -43,7 +43,8 @@ public class SMTEvalByTypeOfToken {
 		String fn_statisticIncorrectMapping="incorrect_mappxting.txt";
 //		String fn_vocabulary="vocabulary.txt";
 		
-		String name_map_1_10="map_1-10";
+		String name_map_1="map_1";
+		String name_map_2_10="map_2-10";
 		String name_map_11_20="map_11-20";
 		String name_map_21_50="map_21-50";
 		String name_map_51_100="map_51-100";
@@ -119,8 +120,10 @@ public class SMTEvalByTypeOfToken {
 			
 			HashMap<String,Integer> mapByNumMap=new HashMap<String, Integer>();
 			
-			mapByNumMap.put(name_map_1_10+strCorrect, 0);
-			mapByNumMap.put(name_map_1_10+strIncorrect, 0);
+			mapByNumMap.put(name_map_1+strCorrect, 0);
+			mapByNumMap.put(name_map_1+strIncorrect, 0);
+			mapByNumMap.put(name_map_2_10+strCorrect, 0);
+			mapByNumMap.put(name_map_2_10+strIncorrect, 0);
 			mapByNumMap.put(name_map_11_20+strCorrect, 0);
 			mapByNumMap.put(name_map_11_20+strIncorrect, 0);
 			mapByNumMap.put(name_map_21_50+strCorrect, 0);
@@ -287,8 +290,11 @@ public class SMTEvalByTypeOfToken {
 						
 						int numAppearInTrainOfSource=mapCountAppearInTrain.get(itemSource[j]).size();						
 						String itemMapBunchName="";
-						if(numAppearInTrainOfSource<=10) {
-							itemMapBunchName=name_map_1_10;
+						if(numAppearInTrainOfSource==1) {
+							itemMapBunchName=name_map_1;
+						}
+						else if(numAppearInTrainOfSource>=2 && numAppearInTrainOfSource<=10) {
+							itemMapBunchName=name_map_2_10;
 						} else if(numAppearInTrainOfSource>=11 && numAppearInTrainOfSource<=20) {
 							itemMapBunchName=name_map_11_20;
 						} else if(numAppearInTrainOfSource>=21 && numAppearInTrainOfSource<=50) {
@@ -310,8 +316,11 @@ public class SMTEvalByTypeOfToken {
 						
 						int numAppearInTrainOfSource=mapCountAppearInTrain.get(itemSource[j]).size();						
 						String itemMapBunchName="";
-						if(numAppearInTrainOfSource<=10) {
-							itemMapBunchName=name_map_1_10;
+						if(numAppearInTrainOfSource==1) {
+							itemMapBunchName=name_map_1;
+						}
+						else if(numAppearInTrainOfSource>=2 && numAppearInTrainOfSource<=10) {
+							itemMapBunchName=name_map_2_10;
 						} else if(numAppearInTrainOfSource>=11 && numAppearInTrainOfSource<=20) {
 							itemMapBunchName=name_map_11_20;
 						} else if(numAppearInTrainOfSource>=21 && numAppearInTrainOfSource<=50) {
@@ -386,7 +395,7 @@ public class SMTEvalByTypeOfToken {
 		FileUtil.appendToFile(fop_output+fn_result,"Precision per mapping number\n");
 		//print percentage per library
 		
-		int num1_10=0,num11_20=0,num21_50=0,num51_100=0,num_101=0;
+		int num1=0,num2_10=0,num11_20=0,num21_50=0,num51_100=0,num_101=0;
 		
 		for(String strItem:mapCountPrecisionInTraining.keySet()) {
 			
@@ -394,12 +403,19 @@ public class SMTEvalByTypeOfToken {
 			int numberOfCasePerLib=0;
 			
 			HashMap<String,Integer> mapTemp=mapCountPrecisionInTraining.get(strItem);
-			int correctNum=mapTemp.get(name_map_1_10+strCorrect);
-			int incNum=mapTemp.get(name_map_1_10+strIncorrect);
+			int correctNum=mapTemp.get(name_map_1+strCorrect);
+			int incNum=mapTemp.get(name_map_1+strIncorrect);
 			numberOfCasePerLib+=correctNum+incNum;
 			precision=((correctNum+incNum)!=0)?(correctNum*1.0/(correctNum+incNum)):0;
 			strContent+=precision+"\t";
-			num1_10+=correctNum+incNum;
+			num1+=correctNum+incNum;
+			
+			correctNum=mapTemp.get(name_map_2_10+strCorrect);
+			incNum=mapTemp.get(name_map_2_10+strIncorrect);
+			precision=((correctNum+incNum)!=0)?(correctNum*1.0/(correctNum+incNum)):0;
+			numberOfCasePerLib+=correctNum+incNum;
+			strContent+=precision+"\t";
+			name_map_2_10+=correctNum+incNum;
 			
 			correctNum=mapTemp.get(name_map_11_20+strCorrect);
 			incNum=mapTemp.get(name_map_11_20+strIncorrect);
@@ -435,11 +451,11 @@ public class SMTEvalByTypeOfToken {
 			
 		}
 		
-		int total=num1_10+num11_20+num21_50+num51_100+num_101;
+		int total=num1+num2_10+num11_20+num21_50+num51_100+num_101;
 		
-		FileUtil.appendToFile(fop_output+fn_result,"Total:\t"+num1_10+"\t"+num11_20+"\t"+num21_50+"\t"+num51_100+"\t"+num_101+"\n");
+		FileUtil.appendToFile(fop_output+fn_result,"Total:\t"+num1+"\t"+num2_10+"\t"+num11_20+"\t"+num21_50+"\t"+num51_100+"\t"+num_101+"\n");
 		
-		FileUtil.appendToFile(fop_output+fn_result,"Percentage:\t"+num1_10*1.0/total+"\t"+num11_20*1.0/total+"\t"+num21_50*1.0/total+"\t"+num51_100*1.0/total+"\t"+num_101*1.0/total+"\n");
+		FileUtil.appendToFile(fop_output+fn_result,"Percentage:\t"+num1*1.0/total+"\t"+num2_10*1.0/total+"\t"+num11_20*1.0/total+"\t"+num21_50*1.0/total+"\t"+num51_100*1.0/total+"\t"+num_101*1.0/total+"\n");
 		
 		
 	}
