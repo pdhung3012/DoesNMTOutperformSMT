@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 import analysis.TypeOfCodeTokenRegex;
 import constanct.PathConstanct;
@@ -18,67 +19,8 @@ public class SMTEvalByTypeOfToken {
 
 //	/sensitivity_5fold_ressult\\
 	
-	public static String SplitInvocationCharacter="\\$\\%\\$";
-	
-	public static boolean checkAPIsInLibrary(HashSet<String> setLib,String token){
-		boolean check=false;
-		for(String str:setLib){
-			if(token.startsWith(str)){
-				//System.out.println(token);
-				check=true;
-				break;
-			}
-		}
-		return check;
-	}
-	
-	public static String getInvocationReceiverInLibrary(String info){
-		String result="";
-		String[] arrLine=info.split(SplitInvocationCharacter);
-		//System.out.println(arrLine[0]);
-		if(arrLine.length>4){
-			String sigInfo=arrLine[arrLine.length-4];
-			
-			String[] arrSigs=sigInfo.split("#");
-			if(arrSigs.length>=2){
-				result=arrSigs[1];
-			}
-		}
-		
-		return result;
-	}
-	
-	public static HashMap<String,String> getLibraryInfo(HashMap<String,String> mapTotalId){
-		HashMap<String,String> map=new LinkedHashMap<String, String>();
-		for(String key:mapTotalId.keySet()){
-			String val=mapTotalId.get(key);
-			String fqn=getInvocationReceiverInLibrary(val);
-			map.put(key, fqn);
-		}
-		return map;
-	}
 	
 	
-	
-	public static boolean checkIdentifierInfo(String tokenSource){
-		boolean check=false;
-		if(tokenSource.endsWith("#identifier")){
-			check=true;
-		}
-		return check;
-	}
-	
-	public static String getPackageAPIsInLibrary(HashSet<String> setLib,String token){
-		String result="";
-		for(String str:setLib){
-			if(token.startsWith(str)){
-				//System.out.println(token);
-				result=str;
-				break;
-			}
-		}
-		return result;
-	}
 	
 	
 	public static void main(String[] args) {
@@ -101,6 +43,12 @@ public class SMTEvalByTypeOfToken {
 		String fn_statisticIncorrectMapping="incorrect_mappxting.txt";
 //		String fn_vocabulary="vocabulary.txt";
 		
+		String name_map_1_10="map_1-10";
+		String name_map_11_20="map_11-20";
+		String name_map_21_50="map_21-50";
+		String name_map_51_100="map_51-100";
+		String name_map_greaterThan_100="map_greaterThan100";
+		
 //		HashMap<String,String> mapTotalId=MapUtil.getHashMapFromFile(fop_mapTotalId+"a_mapTotalIdAndContent.txt");
 //		HashMap<String,String> mapIdLibrary=getLibraryInfo(mapTotalId);
 //		System.out.println(mapTotalId.size()+" Map total ID loaded!");
@@ -119,6 +67,8 @@ public class SMTEvalByTypeOfToken {
 		HashSet<String> setVocabTrainTarget=new HashSet<String>();
 		HashSet<String> setVocabTrainMapping=new HashSet<String>();
 		HashMap<String,Integer> mapVocabTraining=new HashMap<String, Integer>();
+		
+		
 		
 		HashSet<String> set5Libraries=new HashSet<String>();
 //		set5Libraries.add("android");
@@ -140,6 +90,7 @@ public class SMTEvalByTypeOfToken {
 		HashMap<String,PrintStream> mapCorrectPrintScreen=new HashMap<String, PrintStream>();
 		HashMap<String,PrintStream> mapIncorrectPrintScreen=new HashMap<String, PrintStream>();
 		
+		
 		for(String strKey:set5Libraries){
 			try{
 				PrintStream ptCorrectResult=new PrintStream(new FileOutputStream(fop_output+"cor_"+strKey+".txt"));
@@ -154,7 +105,10 @@ public class SMTEvalByTypeOfToken {
 		
 		
 		HashMap<String,HashMap<String,Integer>> mapCountPerLibrary=new HashMap<String, HashMap<String,Integer>>();
+		HashMap<String,HashMap<String,Integer>> mapCountPrecisionInTraining=new HashMap<String, HashMap<String,Integer>>();
 		String keyMapCountPerLibrary="total-key";
+		String strCorrect="Correct";
+		String strIncorrect="Incorrect";
 		for(String strItem:set5Libraries){
 			HashMap<String,Integer> mapElement=new HashMap<String, Integer>();
 			mapElement.put("Correct", 0);
@@ -162,6 +116,21 @@ public class SMTEvalByTypeOfToken {
 			mapElement.put("OOT", 0);
 			mapElement.put("OOS", 0);
 			mapCountPerLibrary.put(strItem, mapElement);
+			
+			HashMap<String,Integer> mapByNumMap=new HashMap<String, Integer>();
+			
+			mapByNumMap.put(name_map_1_10+strCorrect, 0);
+			mapByNumMap.put(name_map_1_10+strIncorrect, 0);
+			mapByNumMap.put(name_map_11_20+strCorrect, 0);
+			mapByNumMap.put(name_map_11_20+strIncorrect, 0);
+			mapByNumMap.put(name_map_21_50+strCorrect, 0);
+			mapByNumMap.put(name_map_21_50+strIncorrect, 0);
+			mapByNumMap.put(name_map_51_100+strCorrect, 0);
+			mapByNumMap.put(name_map_51_100+strIncorrect, 0);
+			mapByNumMap.put(name_map_greaterThan_100+strCorrect, 0);
+			mapByNumMap.put(name_map_greaterThan_100+strIncorrect, 0);
+			
+			mapCountPrecisionInTraining.put(strItem, mapByNumMap);
 		}
 		
 		
@@ -205,6 +174,8 @@ public class SMTEvalByTypeOfToken {
 		
 	//	arrTrainSource.clear();
 		ArrayList<String> arrTrainTarget=FileUtil.getFileStringArray(fop_input+fn_trainTarget);
+		HashMap<String,HashSet<String>> mapCountAppearInTrain=new HashMap<String, HashSet<String>>();
+		
 		
 		
 		for(int i=0;i<arrTrainTarget.size();i++){
@@ -212,7 +183,17 @@ public class SMTEvalByTypeOfToken {
 			
 			String[] itemTarget=arrTrainTarget.get(i).trim().split("\\s+");
 			for(int j=0;j<itemTarget.length;j++){
-								
+				
+				//calculate library
+				if(!mapCountAppearInTrain.containsKey(itemSource[j])) {
+					HashSet<String> setItem=new LinkedHashSet<String>();
+					setItem.add(itemTarget[j]);
+					mapCountAppearInTrain.put(itemSource[j], setItem);
+				} else {
+					HashSet<String> setItem=mapCountAppearInTrain.get(itemSource[j]);
+					setItem.add(itemTarget[j]);
+				}
+				
 				if(!setVocabTrainTarget.contains(itemTarget[j])){
 					setVocabTrainTarget.add(itemTarget[j]);
 				}
@@ -301,7 +282,24 @@ public class SMTEvalByTypeOfToken {
 							setOutTarget.add(itemTarget[j]);
 						}
 					}else if(itemTarget[j].equals(itemTrans[j])){
+						
 						numCorrect++;
+						
+						int numAppearInTrainOfSource=mapCountPrecisionInTraining.get(itemSource[j]).size();						
+						String itemMapBunchName="";
+						if(numAppearInTrainOfSource<=10) {
+							itemMapBunchName=name_map_1_10;
+						} else if(numAppearInTrainOfSource>=11 && numAppearInTrainOfSource<=20) {
+							itemMapBunchName=name_map_11_20;
+						} else if(numAppearInTrainOfSource>=21 && numAppearInTrainOfSource<=50) {
+							itemMapBunchName=name_map_21_50;
+						} else if(numAppearInTrainOfSource>=51 && numAppearInTrainOfSource<=100) {
+							itemMapBunchName=name_map_51_100;
+						} else if(numAppearInTrainOfSource>100) {
+							itemMapBunchName=name_map_greaterThan_100;
+						}
+						int curCorrectBunch=mapCountPrecisionInTraining.get(keyMapCountPerLibrary).get(itemMapBunchName+strCorrect);
+						mapCountPrecisionInTraining.get(keyMapCountPerLibrary).put(itemMapBunchName+strCorrect,curCorrectBunch+1);
 						
 						int currentNumber=mapCountPerLibrary.get(keyMapCountPerLibrary).get("Correct");
 						mapCountPerLibrary.get(keyMapCountPerLibrary).put("Correct",currentNumber+1);
@@ -309,6 +307,24 @@ public class SMTEvalByTypeOfToken {
 						mapCorrectPrintScreen.get(keyMapCountPerLibrary).print(itemSource[j]+","+mapVocabTraining.get(itemSource[j])+"\n");
 					} else{
 						numIncorrect++;
+						
+						int numAppearInTrainOfSource=mapCountPrecisionInTraining.get(itemSource[j]).size();						
+						String itemMapBunchName="";
+						if(numAppearInTrainOfSource<=10) {
+							itemMapBunchName=name_map_1_10;
+						} else if(numAppearInTrainOfSource>=11 && numAppearInTrainOfSource<=20) {
+							itemMapBunchName=name_map_11_20;
+						} else if(numAppearInTrainOfSource>=21 && numAppearInTrainOfSource<=50) {
+							itemMapBunchName=name_map_21_50;
+						} else if(numAppearInTrainOfSource>=51 && numAppearInTrainOfSource<=100) {
+							itemMapBunchName=name_map_51_100;
+						} else if(numAppearInTrainOfSource>100) {
+							itemMapBunchName=name_map_greaterThan_100;
+						}
+						int curIncorrectBunch=mapCountPrecisionInTraining.get(keyMapCountPerLibrary).get(itemMapBunchName+strIncorrect);
+						mapCountPrecisionInTraining.get(keyMapCountPerLibrary).put(itemMapBunchName+strIncorrect,curIncorrectBunch+1);
+
+						
 						int currentNumber=mapCountPerLibrary.get(keyMapCountPerLibrary).get("Incorrect");
 						mapCountPerLibrary.get(keyMapCountPerLibrary).put("Incorrect",currentNumber+1);
 					//	if(!setIncorrect.contains(itemTrans[j]+"(Correct: "+itemTarget[j]+") ")){
@@ -367,6 +383,51 @@ public class SMTEvalByTypeOfToken {
 			FileUtil.appendToFile(fop_output+fn_result, strItem+":\t"+mapTemp.get("Correct")+"\t"+mapTemp.get("Incorrect")+"\t"+mapTemp.get("OOS")+"\t"+mapTemp.get("OOT")+"\t"+(mapTemp.get("OOS")+mapTemp.get("OOT"))+"\t"+precision+"\t"+recall+"\t"+f1score+"\n");
 		}
 		
+		FileUtil.appendToFile(fop_output+fn_result,"Precision per mapping number\n");
+		//print percentage per library
+		
+		
+		for(String strItem:mapCountPrecisionInTraining.keySet()) {
+			
+			String strContent=strItem+":\t";
+			int numberOfCasePerLib=0;
+			
+			HashMap<String,Integer> mapTemp=mapCountPerLibrary.get(strItem);
+			int correctNum=mapTemp.get(name_map_1_10+strCorrect);
+			int incNum=mapTemp.get(name_map_1_10+strIncorrect);
+			numberOfCasePerLib+=correctNum+incNum;
+			precision=correctNum*1.0/(correctNum+incNum);
+			strContent+=precision+"\t";
+			
+			correctNum=mapTemp.get(name_map_11_20+strCorrect);
+			incNum=mapTemp.get(name_map_11_20+strIncorrect);
+			precision=correctNum*1.0/(correctNum+incNum);
+			numberOfCasePerLib+=correctNum+incNum;
+			strContent+=precision+"\t";
+			
+			correctNum=mapTemp.get(name_map_21_50+strCorrect);
+			incNum=mapTemp.get(name_map_21_50+strIncorrect);
+			precision=correctNum*1.0/(correctNum+incNum);
+			numberOfCasePerLib+=correctNum+incNum;
+			strContent+=precision+"\t";
+			
+			correctNum=mapTemp.get(name_map_51_100+strCorrect);
+			incNum=mapTemp.get(name_map_51_100+strIncorrect);
+			precision=correctNum*1.0/(correctNum+incNum);
+			numberOfCasePerLib+=correctNum+incNum;
+			strContent+=precision+"\t";
+			
+			correctNum=mapTemp.get(name_map_greaterThan_100+strCorrect);
+			incNum=mapTemp.get(name_map_greaterThan_100+strIncorrect);
+			precision=correctNum*1.0/(correctNum+incNum);
+			numberOfCasePerLib+=correctNum+incNum;
+			strContent+=precision+"\t";
+			
+			strContent+=numberOfCasePerLib+"\n";
+			FileUtil.appendToFile(fop_output+fn_result, strContent);
+
+			
+		}
 		
 	}
 
