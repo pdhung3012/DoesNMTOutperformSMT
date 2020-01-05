@@ -392,34 +392,34 @@ public class SMTEvalByTypeOfToken {
 			String strContent=strItem+":\t";
 			int numberOfCasePerLib=0;
 			
-			HashMap<String,Integer> mapTemp=mapCountPerLibrary.get(strItem);
+			HashMap<String,Integer> mapTemp=mapCountPrecisionInTraining.get(strItem);
 			int correctNum=mapTemp.get(name_map_1_10+strCorrect);
 			int incNum=mapTemp.get(name_map_1_10+strIncorrect);
 			numberOfCasePerLib+=correctNum+incNum;
-			precision=correctNum*1.0/(correctNum+incNum);
+			precision=((correctNum+incNum)!=0)?(correctNum*1.0/(correctNum+incNum)):0;
 			strContent+=precision+"\t";
 			
 			correctNum=mapTemp.get(name_map_11_20+strCorrect);
 			incNum=mapTemp.get(name_map_11_20+strIncorrect);
-			precision=correctNum*1.0/(correctNum+incNum);
+			precision=((correctNum+incNum)!=0)?(correctNum*1.0/(correctNum+incNum)):0;
 			numberOfCasePerLib+=correctNum+incNum;
 			strContent+=precision+"\t";
 			
 			correctNum=mapTemp.get(name_map_21_50+strCorrect);
 			incNum=mapTemp.get(name_map_21_50+strIncorrect);
-			precision=correctNum*1.0/(correctNum+incNum);
+			precision=((correctNum+incNum)!=0)?(correctNum*1.0/(correctNum+incNum)):0;
 			numberOfCasePerLib+=correctNum+incNum;
 			strContent+=precision+"\t";
 			
 			correctNum=mapTemp.get(name_map_51_100+strCorrect);
 			incNum=mapTemp.get(name_map_51_100+strIncorrect);
-			precision=correctNum*1.0/(correctNum+incNum);
+			precision=((correctNum+incNum)!=0)?(correctNum*1.0/(correctNum+incNum)):0;
 			numberOfCasePerLib+=correctNum+incNum;
 			strContent+=precision+"\t";
 			
 			correctNum=mapTemp.get(name_map_greaterThan_100+strCorrect);
 			incNum=mapTemp.get(name_map_greaterThan_100+strIncorrect);
-			precision=correctNum*1.0/(correctNum+incNum);
+			precision=((correctNum+incNum)!=0)?(correctNum*1.0/(correctNum+incNum)):0;
 			numberOfCasePerLib+=correctNum+incNum;
 			strContent+=precision+"\t";
 			
